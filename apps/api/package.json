@@ -7,6 +7,7 @@
     "build": "dotnet build -c Release",
     "start": "dotnet run --launch-profile http",
     "restore": "dotnet restore",
-    "clean": "dotnet clean"
+    "clean": "dotnet clean",
+    "test": "dotnet test ../api.Tests"
   }
 }

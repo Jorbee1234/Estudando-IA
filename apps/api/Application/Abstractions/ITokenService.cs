@@ -1,6 +1,6 @@
-using Api.Models;
+using Api.Domain;
 
-namespace Api.Services;
+namespace Api.Application.Abstractions;
 
 public interface ITokenService
 {

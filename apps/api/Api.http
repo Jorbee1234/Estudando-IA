@@ -32,3 +32,59 @@ Accept: application/json
 Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
+
+# Feed (the seed creates julio@example.com, ana@example.com and marcos@example.com, password Senha@1234)
+
+GET {{Api_HostAddress}}/api/posts?limit=6&sort=popular
+Accept: application/json
+
+###
+
+GET {{Api_HostAddress}}/api/posts?q=acess&tags=React&tags=Front-end
+Accept: application/json
+
+###
+
+GET {{Api_HostAddress}}/api/tags
+Accept: application/json
+
+###
+
+# @name seedLogin
+POST {{Api_HostAddress}}/api/tokens
+Content-Type: application/json
+
+{
+  "email": "julio@example.com",
+  "password": "Senha@1234"
+}
+
+###
+
+# @name newPost
+POST {{Api_HostAddress}}/api/posts
+Content-Type: application/json
+Authorization: Bearer {{seedLogin.response.body.$.accessToken}}
+
+{
+  "title": "Meu novo projeto",
+  "description": "Descrição do projeto.",
+  "tags": ["React", "CSS"]
+}
+
+###
+
+PUT {{Api_HostAddress}}/api/posts/{{newPost.response.body.$.id}}/likes/me
+Authorization: Bearer {{seedLogin.response.body.$.accessToken}}
+
+###
+
+POST {{Api_HostAddress}}/api/posts/{{newPost.response.body.$.id}}/comments
+Content-Type: application/json
+Authorization: Bearer {{seedLogin.response.body.$.accessToken}}
+
+{
+  "body": "Primeiro comentário!"
+}
+
+###

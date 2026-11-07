@@ -1,12 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Api.Models;
-using Api.Options;
+using Api.Domain;
+using Api.Application.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Api.Services;
+namespace Api.Infrastructure.Security;
 
 public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenService
 {
@@ -26,7 +26,6 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
             [
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Name, user.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             ],
             expires: DateTime.UtcNow.Add(expires),

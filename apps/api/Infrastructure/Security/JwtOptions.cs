@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Api.Options;
+namespace Api.Infrastructure.Security;
 
 public sealed class JwtOptions
 {

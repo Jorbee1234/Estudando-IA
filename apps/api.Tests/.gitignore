@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# Publish output
+publish/
+
+# Editor directories and files
+.vs/
+.idea/
+*.user
+*.suo
+
+# Local configuration
+appsettings.*.local.json
+
+# Logs
+*.log
+
+# Node (pnpm workspace package)
+node_modules/

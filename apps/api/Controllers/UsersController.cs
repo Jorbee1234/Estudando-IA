@@ -1,17 +1,13 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Api.Application.Users;
 using Api.Dtos;
-using Api.Models;
-using Api.Services;
+using Api.Mapping;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserStore users, IPasswordHasher<User> hasher) : ControllerBase
+public class UsersController(UserService users) : ApiControllerBase
 {
     private const string MeRoute = "GetCurrentUser";
 
@@ -23,25 +19,15 @@ public class UsersController(IUserStore users, IPasswordHasher<User> hasher) : C
     [ProducesResponseType<UserResponse>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    public IActionResult Create(CreateUserRequest request)
+    public async Task<IActionResult> Create(CreateUserRequest request, CancellationToken cancellationToken)
     {
-        var user = new User
-        {
-            Name = request.Name.Trim(),
-            Email = request.Email.Trim(),
-        };
-        user.PasswordHash = hasher.HashPassword(user, request.Password);
+        var result = await users.RegisterAsync(request.Name, request.Email, request.Password, cancellationToken);
 
-        if (!users.TryAdd(user))
+        return ToActionResult(result, user =>
         {
-            return Problem(
-                title: "E-mail already registered",
-                detail: "A user with this e-mail already exists.",
-                statusCode: StatusCodes.Status409Conflict);
-        }
-
-        Response.Headers.CacheControl = "no-store";
-        return CreatedAtRoute(MeRoute, null, ToResponse(user));
+            MarkNoStore();
+            return CreatedAtRoute(MeRoute, null, user.ToResponse());
+        });
     }
 
     /// <summary>Returns the authenticated user.</summary>
@@ -51,22 +37,14 @@ public class UsersController(IUserStore users, IPasswordHasher<User> hasher) : C
     [Authorize]
     [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
-    public IActionResult GetCurrent()
+    public async Task<IActionResult> GetCurrent(CancellationToken cancellationToken)
     {
-        var sub = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        if (!Guid.TryParse(sub, out var id) || users.FindById(id) is not { } user)
+        var result = await users.GetAsync(CurrentUserId, cancellationToken);
+
+        return ToActionResult(result, user =>
         {
-            return Problem(title: "Unauthorized", statusCode: StatusCodes.Status401Unauthorized);
-        }
-
-        Response.Headers.CacheControl = "no-store";
-        return Ok(ToResponse(user));
+            MarkNoStore();
+            return Ok(user.ToResponse());
+        });
     }
-
-    private static UserResponse ToResponse(User user) =>
-        new(user.Id, user.Name, user.Email,
-        [
-            new Link("self", "/api/users/me", "GET"),
-            new Link("token", "/api/tokens", "POST"),
-        ]);
 }

@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[ApiController]
 [Route("api/[controller]")]
-public class HealthController : ControllerBase
+public class HealthController : ApiControllerBase
 {
     [HttpGet]
     public IActionResult Get() => Ok(new { status = "ok" });

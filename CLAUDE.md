@@ -43,14 +43,22 @@ Because of the proxy, the API has no CORS configuration. Nothing in the repo yet
 
 The API port (5164) is hardcoded in three places that must stay in sync: `apps/api/Properties/launchSettings.json`, `apps/web/vite.config.ts`, and `apps/api/Api.http`.
 
-In the Development environment the API exposes its OpenAPI document (`MapOpenApi`, at `/openapi/v1.json` by default); outside Development it enables HTTPS redirection instead.
+In the Development environment the API exposes Swagger UI at `/swagger` (Swashbuckle; document at `/swagger/v1/swagger.json`); outside Development it enables HTTPS redirection instead. The Swagger UI has an **Authorize** button: paste the `accessToken` returned by `POST /api/tokens`.
+
+### Authentication
+
+- `POST /api/users` registers a user, `POST /api/tokens` logs in and returns a JWT, and `GET /api/users/me` (`[Authorize]`) returns the logged-in user.
+- Users live in `InMemoryUserStore` (singleton): they are lost on every API restart. Passwords are hashed with `PasswordHasher<User>`.
+- JWT settings are in the `Jwt` section of `appsettings.json`. `Jwt:SecretKey` (at least 32 characters) is set only in `appsettings.Development.json`; in production provide it through the `Jwt__SecretKey` environment variable, otherwise the API fails on startup.
+- Inbound claim mapping is off (`MapInboundClaims = false`), so read the user id from the `sub` claim, not `ClaimTypes.NameIdentifier`.
 
 ## Frontend conventions
 
 - **Atomic Design:** organize components by level under `apps/web/src/components/`: `atoms`, `molecules`, `organisms`, `templates`, `pages`. A component may only be composed from levels below its own.
 - **Tailwind CSS:** style with Tailwind utility classes rather than new component CSS files. Design tokens (colors, font) live in the `@theme` block in `apps/web/src/index.css`.
 - **Tests:** every component must have a test, next to it as `<Component>.test.tsx`, covering its essential usage. Tests use Vitest and Testing Library, and import from `vitest` explicitly because globals are off.
-- **Auth screens:** `AuthTemplate` holds the layout shared by login and the future signup page; it receives the banner, texts, and form content as props.
+- **Auth screens:** `AuthTemplate` holds the layout shared by `LoginPage` and `SignupPage`; it receives the banner, texts, and form content as props.
+- **Routing:** `react-router` (`BrowserRouter` in `main.tsx`, routes in `App.tsx`: `/login`, `/cadastro`). Internal links use `TextLink`, which wraps the router's `Link`, so components that render it need a router in tests (`MemoryRouter`).
 - `apps/web/tsconfig.app.json` sets `erasableSyntaxOnly` and `verbatimModuleSyntax`: no `enum`, `namespace`, or constructor parameter properties, and type-only imports must use `import type`. It also sets `noUnusedLocals` and `noUnusedParameters`, so unused code fails the build.
 
 ## Backend conventions

@@ -8,11 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lighthouse": "vite build && node scripts/lighthouse.mjs"
   },
   "dependencies": {
+    "@fontsource/prompt": "^5.3.0",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "react-router": "^8.5.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.4",
@@ -24,7 +27,9 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "axe-core": "^4.14.0",
     "jsdom": "^27.4.0",
+    "lighthouse": "^13.6.0",
     "oxlint": "^1.90.0",
     "tailwindcss": "^4.3.4",
     "typescript": "~7.0.2",

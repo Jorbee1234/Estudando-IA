@@ -26,4 +26,18 @@ describe('AuthTemplate', () => {
       screen.getByRole('form', { name: 'Formulário de teste' }),
     ).toBeInTheDocument()
   })
+
+  it('shows the brand logo over the banner', () => {
+    render(
+      <AuthTemplate
+        banner={{ src: '/banner.png', alt: 'Banner de teste' }}
+        title="Cadastro"
+        subtitle="Crie sua conta."
+      >
+        <form aria-label="Formulário de teste" />
+      </AuthTemplate>,
+    )
+
+    expect(screen.getByRole('img', { name: 'CodeConnect' })).toBeInTheDocument()
+  })
 })

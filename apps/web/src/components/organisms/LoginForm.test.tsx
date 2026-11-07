@@ -1,11 +1,16 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { LoginForm } from './LoginForm'
 
 function renderForm() {
   const onSubmit = vi.fn()
-  render(<LoginForm forgotPasswordHref="/esqueci-a-senha" onSubmit={onSubmit} />)
+  render(
+    <MemoryRouter>
+      <LoginForm forgotPasswordHref="/esqueci-a-senha" onSubmit={onSubmit} />
+    </MemoryRouter>,
+  )
   return onSubmit
 }
 

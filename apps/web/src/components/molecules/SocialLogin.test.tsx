@@ -4,8 +4,22 @@ import { describe, expect, it, vi } from 'vitest'
 import { SocialLogin } from './SocialLogin'
 
 const providers = [
-  { id: 'github', label: 'Entrar com Github', iconSrc: '/github.png' },
-  { id: 'gmail', label: 'Entrar com Gmail', iconSrc: '/Gmail.png' },
+  {
+    id: 'github',
+    name: 'Github',
+    label: 'Entrar com Github',
+    iconSrc: '/github.svg',
+    iconWidth: 33,
+    iconHeight: 32,
+  },
+  {
+    id: 'gmail',
+    name: 'Gmail',
+    label: 'Entrar com Gmail',
+    iconSrc: '/google.svg',
+    iconWidth: 28,
+    iconHeight: 28,
+  },
 ]
 
 describe('SocialLogin', () => {

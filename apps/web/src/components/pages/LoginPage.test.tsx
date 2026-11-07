@@ -1,13 +1,22 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { LoginPage } from './LoginPage'
+
+function renderPage(onLogin = vi.fn(), onSocialLogin = vi.fn()) {
+  render(
+    <MemoryRouter>
+      <LoginPage onLogin={onLogin} onSocialLogin={onSocialLogin} />
+    </MemoryRouter>,
+  )
+}
 
 describe('LoginPage', () => {
   it('reports form submissions and social logins', async () => {
     const onLogin = vi.fn()
     const onSocialLogin = vi.fn()
-    render(<LoginPage onLogin={onLogin} onSocialLogin={onSocialLogin} />)
+    renderPage(onLogin, onSocialLogin)
 
     await userEvent.type(screen.getByLabelText('Email ou usuário'), 'ana')
     await userEvent.type(screen.getByLabelText('Senha'), 'segredo')
@@ -24,8 +33,14 @@ describe('LoginPage', () => {
     expect(onSocialLogin).toHaveBeenCalledExactlyOnceWith('github')
   })
 
+  it('sets the document title', async () => {
+    renderPage()
+
+    await waitFor(() => expect(document.title).toBe('Login | Code Connect'))
+  })
+
   it('links to the signup page', () => {
-    render(<LoginPage onLogin={vi.fn()} onSocialLogin={vi.fn()} />)
+    renderPage()
 
     expect(
       screen.getByRole('link', { name: 'Crie seu cadastro!' }),

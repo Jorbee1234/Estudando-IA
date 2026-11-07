@@ -1,10 +1,15 @@
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { TextLink } from './TextLink'
 
 describe('TextLink', () => {
   it('renders a link to the given address', () => {
-    render(<TextLink href="/cadastro">Crie seu cadastro!</TextLink>)
+    render(
+      <MemoryRouter>
+        <TextLink href="/cadastro">Crie seu cadastro!</TextLink>
+      </MemoryRouter>,
+    )
 
     expect(
       screen.getByRole('link', { name: 'Crie seu cadastro!' }),
@@ -13,9 +18,11 @@ describe('TextLink', () => {
 
   it('applies the chosen variant', () => {
     render(
-      <TextLink href="/cadastro" variant="accent">
-        Crie seu cadastro!
-      </TextLink>,
+      <MemoryRouter>
+        <TextLink href="/cadastro" variant="accent">
+          Crie seu cadastro!
+        </TextLink>
+      </MemoryRouter>,
     )
 
     expect(screen.getByRole('link')).toHaveClass('text-accent')

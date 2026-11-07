@@ -11,4 +11,10 @@ describe('Icon', () => {
     expect(svg).toHaveAttribute('aria-hidden', 'true')
     expect(svg?.querySelector('path')).toBeInTheDocument()
   })
+
+  it('renders the login icon', () => {
+    const { container } = render(<Icon name="login" />)
+
+    expect(container.querySelector('svg')).toHaveAttribute('data-icon', 'login')
+  })
 })

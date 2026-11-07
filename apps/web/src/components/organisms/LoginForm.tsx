@@ -6,7 +6,7 @@ import { CheckboxField } from '../molecules/CheckboxField'
 import { FormField } from '../molecules/FormField'
 
 export type LoginFormData = {
-  login: string
+  email: string
   password: string
   remember: boolean
 }
@@ -14,14 +14,21 @@ export type LoginFormData = {
 type LoginFormProps = {
   forgotPasswordHref: string
   onSubmit: (data: LoginFormData) => void
+  error?: string
+  pending?: boolean
 }
 
-export function LoginForm({ forgotPasswordHref, onSubmit }: LoginFormProps) {
+export function LoginForm({
+  forgotPasswordHref,
+  onSubmit,
+  error,
+  pending = false,
+}: LoginFormProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     onSubmit({
-      login: String(data.get('login')),
+      email: String(data.get('email')),
       password: String(data.get('password')),
       remember: data.has('remember'),
     })
@@ -31,11 +38,12 @@ export function LoginForm({ forgotPasswordHref, onSubmit }: LoginFormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col">
       <div className="flex flex-col gap-[13px]">
         <FormField
-          id="login"
-          name="login"
-          label="Email ou usuário"
-          placeholder="usuario123"
-          autoComplete="username"
+          id="email"
+          name="email"
+          label="Email"
+          type="email"
+          placeholder="Digite seu email"
+          autoComplete="email"
           required
         />
         <FormField
@@ -52,8 +60,13 @@ export function LoginForm({ forgotPasswordHref, onSubmit }: LoginFormProps) {
         <CheckboxField name="remember" label="Lembrar-me" />
         <TextLink href={forgotPasswordHref}>Esqueci a senha</TextLink>
       </div>
+      {error && (
+        <p role="alert" className="mt-4 text-sm text-red-600">
+          {error}
+        </p>
+      )}
       <div className="mt-8">
-        <Button type="submit">
+        <Button type="submit" disabled={pending}>
           Login
           <Icon name="arrow-right" />
         </Button>

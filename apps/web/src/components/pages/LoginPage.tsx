@@ -8,9 +8,16 @@ import { socialProviders } from './socialProviders'
 type LoginPageProps = {
   onLogin: (data: LoginFormData) => void
   onSocialLogin: (providerId: string) => void
+  error?: string
+  pending?: boolean
 }
 
-export function LoginPage({ onLogin, onSocialLogin }: LoginPageProps) {
+export function LoginPage({
+  onLogin,
+  onSocialLogin,
+  error,
+  pending,
+}: LoginPageProps) {
   return (
     <>
       <title>Login | Code Connect</title>
@@ -24,7 +31,12 @@ export function LoginPage({ onLogin, onSocialLogin }: LoginPageProps) {
         headerInset
       >
         <div className="mx-auto w-full max-w-[318px] pt-2">
-          <LoginForm forgotPasswordHref="/esqueci-a-senha" onSubmit={onLogin} />
+          <LoginForm
+            forgotPasswordHref="/esqueci-a-senha"
+            onSubmit={onLogin}
+            error={error}
+            pending={pending}
+          />
         </div>
         <div className="mt-8">
           <SocialLogin

@@ -18,7 +18,7 @@ describe('LoginPage', () => {
     const onSocialLogin = vi.fn()
     renderPage(onLogin, onSocialLogin)
 
-    await userEvent.type(screen.getByLabelText('Email ou usuário'), 'ana')
+    await userEvent.type(screen.getByLabelText('Email'), 'ana@example.com')
     await userEvent.type(screen.getByLabelText('Senha'), 'segredo')
     await userEvent.click(screen.getByRole('button', { name: 'Login' }))
     await userEvent.click(
@@ -26,7 +26,7 @@ describe('LoginPage', () => {
     )
 
     expect(onLogin).toHaveBeenCalledExactlyOnceWith({
-      login: 'ana',
+      email: 'ana@example.com',
       password: 'segredo',
       remember: false,
     })

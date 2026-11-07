@@ -13,4 +13,10 @@ describe('Input', () => {
     expect(input).toHaveAttribute('type', 'email')
     expect(input).toHaveValue('ana@example.com')
   })
+
+  it('merges an external className without dropping the base styles', () => {
+    render(<Input placeholder="x" className="mt-2" />)
+
+    expect(screen.getByPlaceholderText('x')).toHaveClass('mt-2', 'bg-field')
+  })
 })

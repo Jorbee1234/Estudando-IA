@@ -22,6 +22,13 @@ describe('SignupForm', () => {
     })
   })
 
+  it('shows the error and disables the button while pending', () => {
+    render(<SignupForm onSubmit={vi.fn()} error="Email já cadastrado" pending />)
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Email já cadastrado')
+    expect(screen.getByRole('button', { name: 'Cadastrar' })).toBeDisabled()
+  })
+
   it('does not submit without the required fields', async () => {
     const onSubmit = vi.fn()
     render(<SignupForm onSubmit={onSubmit} />)

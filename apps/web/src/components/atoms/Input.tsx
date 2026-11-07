@@ -1,10 +1,7 @@
 import type { ComponentProps } from 'react'
+import { cn } from '../../lib/cn'
+import { fieldStyles } from './fieldStyles'
 
-export function Input(props: ComponentProps<'input'>) {
-  return (
-    <input
-      className="w-full rounded bg-field px-4 py-2 text-[15px] leading-normal text-page outline-none placeholder:text-page/80 focus-visible:ring-2 focus-visible:ring-accent"
-      {...props}
-    />
-  )
+export function Input({ className, ...props }: ComponentProps<'input'>) {
+  return <input className={cn(fieldStyles, className)} {...props} />
 }

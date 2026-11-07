@@ -18,16 +18,34 @@ describe('LoginForm', () => {
   it('submits the entered data', async () => {
     const onSubmit = renderForm()
 
-    await userEvent.type(screen.getByLabelText('Email ou usuário'), 'ana')
+    await userEvent.type(screen.getByLabelText('Email'), 'ana@example.com')
     await userEvent.type(screen.getByLabelText('Senha'), 'segredo')
     await userEvent.click(screen.getByRole('checkbox', { name: 'Lembrar-me' }))
     await userEvent.click(screen.getByRole('button', { name: 'Login' }))
 
     expect(onSubmit).toHaveBeenCalledExactlyOnceWith({
-      login: 'ana',
+      email: 'ana@example.com',
       password: 'segredo',
       remember: true,
     })
+  })
+
+  it('shows the error and disables the button while pending', () => {
+    render(
+      <MemoryRouter>
+        <LoginForm
+          forgotPasswordHref="/x"
+          onSubmit={vi.fn()}
+          error="E-mail or password is incorrect."
+          pending
+        />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'E-mail or password is incorrect.',
+    )
+    expect(screen.getByRole('button', { name: 'Login' })).toBeDisabled()
   })
 
   it('does not submit without the required fields', async () => {

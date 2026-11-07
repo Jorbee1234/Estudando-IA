@@ -8,9 +8,16 @@ import { socialProviders } from './socialProviders'
 type SignupPageProps = {
   onSignup: (data: SignupFormData) => void
   onSocialLogin: (providerId: string) => void
+  error?: string
+  pending?: boolean
 }
 
-export function SignupPage({ onSignup, onSocialLogin }: SignupPageProps) {
+export function SignupPage({
+  onSignup,
+  onSocialLogin,
+  error,
+  pending,
+}: SignupPageProps) {
   return (
     <>
       <title>Cadastro | Code Connect</title>
@@ -22,7 +29,7 @@ export function SignupPage({ onSignup, onSocialLogin }: SignupPageProps) {
         title="Cadastro"
         subtitle="Olá! Preencha seus dados."
       >
-        <SignupForm onSubmit={onSignup} />
+        <SignupForm onSubmit={onSignup} error={error} pending={pending} />
         <div className="mt-8">
           <SocialLogin
             title="ou entre com outras contas"

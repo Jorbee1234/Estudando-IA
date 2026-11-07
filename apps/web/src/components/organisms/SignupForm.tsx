@@ -13,9 +13,15 @@ export type SignupFormData = {
 
 type SignupFormProps = {
   onSubmit: (data: SignupFormData) => void
+  error?: string
+  pending?: boolean
 }
 
-export function SignupForm({ onSubmit }: SignupFormProps) {
+export function SignupForm({
+  onSubmit,
+  error,
+  pending = false,
+}: SignupFormProps) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -60,8 +66,13 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
       <div className="mt-2">
         <CheckboxField name="remember" label="Lembrar-me" />
       </div>
+      {error && (
+        <p role="alert" className="mt-4 text-sm text-red-600">
+          {error}
+        </p>
+      )}
       <div className="mt-8">
-        <Button type="submit">
+        <Button type="submit" disabled={pending}>
           Cadastrar
           <Icon name="arrow-right" />
         </Button>

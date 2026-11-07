@@ -1,0 +1,14 @@
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it } from 'vitest'
+import { CheckboxField } from './CheckboxField'
+
+describe('CheckboxField', () => {
+  it('toggles the checkbox when its label is clicked', async () => {
+    render(<CheckboxField label="Lembrar-me" />)
+
+    await userEvent.click(screen.getByText('Lembrar-me'))
+
+    expect(screen.getByRole('checkbox', { name: 'Lembrar-me' })).toBeChecked()
+  })
+})

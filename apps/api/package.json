@@ -1,0 +1,12 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "dotnet watch --non-interactive run --launch-profile http",
+    "build": "dotnet build -c Release",
+    "start": "dotnet run --launch-profile http",
+    "restore": "dotnet restore",
+    "clean": "dotnet clean"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "projeto",
+  "private": true,
+  "packageManager": "pnpm@12.18.0",
+  "scripts": {
+    "web": "pnpm --filter web",
+    "api": "pnpm --filter api",
+    "dev": "pnpm --parallel --filter web --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm --recursive build",
+    "build:web": "pnpm --filter web build",
+    "build:api": "pnpm --filter api build",
+    "lint": "pnpm --filter web lint",
+    "test": "pnpm --filter web test",
+    "preview": "pnpm --filter web preview",
+    "start:api": "pnpm --filter api start"
+  }
+}

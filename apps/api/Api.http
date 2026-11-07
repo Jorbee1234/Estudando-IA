@@ -4,3 +4,31 @@ GET {{Api_HostAddress}}/api/health
 Accept: application/json
 
 ###
+
+POST {{Api_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Maria Silva",
+  "email": "maria@example.com",
+  "password": "Senha@1234"
+}
+
+###
+
+# @name login
+POST {{Api_HostAddress}}/api/tokens
+Content-Type: application/json
+
+{
+  "email": "maria@example.com",
+  "password": "Senha@1234"
+}
+
+###
+
+GET {{Api_HostAddress}}/api/users/me
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###

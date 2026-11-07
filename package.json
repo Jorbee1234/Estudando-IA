@@ -13,7 +13,11 @@
     "build:api": "pnpm --filter api build",
     "lint": "pnpm --filter web lint",
     "test": "pnpm --filter web test",
+    "test:api": "pnpm --filter api test",
     "preview": "pnpm --filter web preview",
-    "start:api": "pnpm --filter api start"
+    "start:api": "pnpm --filter api start",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f db"
   }
 }

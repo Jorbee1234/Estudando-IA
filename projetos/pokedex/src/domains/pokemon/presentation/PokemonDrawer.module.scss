@@ -1,0 +1,141 @@
+@use 'shared/styles/mixins' as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgb(5 7 20 / 60%);
+  backdrop-filter: blur(3px);
+}
+
+.panel {
+  position: fixed;
+  z-index: 50;
+  inset: 0 0 0 auto;
+  width: min(100%, 34rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem 1.25rem 3rem;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.close {
+  @include touch-target;
+  @include focus-ring;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  float: right;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface-2);
+}
+
+.skeleton {
+  display: grid;
+  place-items: center;
+  min-height: 14rem;
+}
+
+.content {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1rem 0 0.5rem;
+  border-radius: var(--radius);
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--drawer-accent, var(--accent)) 40%, transparent), transparent 70%);
+  text-align: center;
+}
+
+.sprite {
+  width: min(70%, 15rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 16px rgb(0 0 0 / 40%));
+}
+
+.number {
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.genus {
+  color: var(--text-muted);
+}
+
+.types {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.heading {
+  font-size: 1.05rem;
+}
+
+.flavor {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+
+  > div {
+    flex: 1 1 6rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+  }
+
+  dt {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.stats {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.abilities {
+  display: grid;
+  gap: 0.75rem;
+}

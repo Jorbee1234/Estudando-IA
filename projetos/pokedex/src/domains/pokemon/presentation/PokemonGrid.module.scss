@@ -1,0 +1,45 @@
+@use 'shared/styles/mixins' as *;
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5rem), 1fr));
+  padding: 0.5rem 0.25rem 1rem; // espaço para o tilt/zoom sem cortar
+  perspective: 1000px;
+
+  > li {
+    min-width: 0;
+  }
+
+  @include up(md) {
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+.count {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.more {
+  display: grid;
+  justify-items: center;
+  padding: 1.5rem 0 3rem;
+}
+
+.button {
+  @include touch-target;
+  @include focus-ring;
+  padding: 0.6rem 1.75rem;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  background: var(--surface);
+  font-weight: 700;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+}

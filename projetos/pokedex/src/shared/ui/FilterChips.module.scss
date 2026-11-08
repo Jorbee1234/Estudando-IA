@@ -1,0 +1,41 @@
+@use 'shared/styles/mixins' as *;
+
+.group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  @include focus-ring;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid var(--chip-color, var(--border));
+  background: var(--surface);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  &[aria-pressed='true'] {
+    background: var(--chip-color, var(--accent));
+    color: var(--chip-text, #0b0d1a);
+  }
+}

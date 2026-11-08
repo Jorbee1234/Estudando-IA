@@ -1,0 +1,27 @@
+@use 'shared/styles/mixins' as *;
+
+.page {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 1rem;
+
+  @include up(md) {
+    padding: 1.25rem 2rem;
+  }
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 700;
+
+  &:focus {
+    top: 1rem;
+  }
+}

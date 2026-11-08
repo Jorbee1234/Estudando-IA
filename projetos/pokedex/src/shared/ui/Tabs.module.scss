@@ -1,0 +1,38 @@
+@use 'shared/styles/mixins' as *;
+
+.list {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.tab {
+  @include touch-target;
+  @include focus-ring;
+  position: relative;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+
+  &[aria-selected='true'] {
+    color: var(--text);
+  }
+}
+
+.indicator {
+  position: absolute;
+  inset: auto 0.5rem 0;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.panel {
+  padding-top: 1.25rem;
+  border-radius: var(--radius-sm);
+}

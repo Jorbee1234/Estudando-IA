@@ -1,0 +1,35 @@
+@use 'shared/styles/mixins' as *;
+
+.wrap {
+  position: relative;
+  display: block;
+}
+
+.trigger {
+  @include focus-ring;
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+.tip {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  &[data-open='true'] {
+    visibility: visible;
+    opacity: 1;
+  }
+}

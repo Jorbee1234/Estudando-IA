@@ -1,0 +1,21 @@
+@use 'shared/styles/mixins' as *;
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.select {
+  @include focus-ring;
+  @include touch-target;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: var(--surface);
+}

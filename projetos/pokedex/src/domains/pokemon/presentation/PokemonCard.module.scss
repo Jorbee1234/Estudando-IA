@@ -1,0 +1,61 @@
+@use 'shared/styles/mixins' as *;
+
+.tilt {
+  height: 100%;
+}
+
+.card {
+  @include focus-ring;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  justify-items: center;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--card-color, var(--accent)) 26%, var(--surface)),
+    var(--surface) 70%
+  );
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.number {
+  justify-self: end;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.image {
+  height: auto;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 11rem;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 35%));
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.types {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 1.6rem;
+}
+
+.skeleton {
+  min-height: 17rem;
+  box-shadow: none;
+}

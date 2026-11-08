@@ -1,0 +1,100 @@
+@use 'shared/styles/mixins' as *;
+
+.header {
+  @include glass;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.25rem;
+
+  @include up(md) {
+    position: sticky;
+    top: 0.75rem;
+    z-index: 10;
+  }
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  letter-spacing: -0.02em;
+}
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.toggle {
+  @include touch-target;
+  @include focus-ring;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  }
+}
+
+.filters {
+  display: grid;
+  gap: 0.9rem 1rem;
+  grid-template-columns: 1fr;
+  align-items: end;
+
+  @include up(sm) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+  }
+}
+
+.types {
+  grid-column: 1 / -1;
+}
+
+.searchField {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.search {
+  @include focus-ring;
+  @include touch-target;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: var(--surface);
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+}
+
+.clear {
+  @include touch-target;
+  @include focus-ring;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: transparent;
+  font-weight: 600;
+}

@@ -1,0 +1,10 @@
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 15% -10%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%),
+    radial-gradient(50rem 40rem at 100% 100%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    var(--bg);
+}

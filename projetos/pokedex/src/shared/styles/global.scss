@@ -1,0 +1,136 @@
+@use 'shared/styles/mixins' as *;
+
+/* Permite transição suave do fundo adaptativo ao tipo do Pokémon. */
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #7c8cff;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0d1020;
+  --surface: #171b30;
+  --surface-2: #20253f;
+  --text: #f4f6ff;
+  --text-muted: #b9bfdc; /* >= 7:1 sobre --surface */
+  --border: #3d4470;
+  --focus: #ffd84d;
+  --accent: #7c8cff;
+  --danger: #ff8a8a;
+  --radius: 1.25rem;
+  --radius-sm: 0.75rem;
+  --shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  --font: system-ui, 'Segoe UI', Roboto, sans-serif;
+  transition: --accent 0.6s ease;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #f3f5ff;
+    --surface: #ffffff;
+    --surface-2: #e8ebfa;
+    --text: #12162b;
+    --text-muted: #424a6b; /* >= 7:1 sobre branco */
+    --border: #8a92b8;
+    --focus: #1a3cff;
+    --danger: #b00020;
+  }
+}
+
+/* Tema Shiny: só troca acento/realce, mantendo contraste AA. */
+:root[data-theme='shiny'] {
+  --accent: #ffc83d;
+  --border: #8a7435;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border: currentcolor;
+    --text-muted: var(--text);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%; /* respeita o tamanho de fonte do usuário */
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  overflow-wrap: anywhere;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  @include visually-hidden;
+}
+
+:root[data-reduce-motion='true'] *,
+:root[data-reduce-motion='true'] *::before,
+:root[data-reduce-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

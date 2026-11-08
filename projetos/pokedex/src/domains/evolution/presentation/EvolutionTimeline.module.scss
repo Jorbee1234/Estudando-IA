@@ -1,0 +1,68 @@
+@use 'shared/styles/mixins' as *;
+
+.root,
+.children {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.branch {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.children {
+  padding-left: 1rem;
+  border-left: 2px dashed var(--border);
+  margin-left: 2.5rem;
+}
+
+.step {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.arrow {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.condition {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.node {
+  @include focus-ring;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 2px solid transparent;
+  min-height: 3.5rem;
+
+  &[data-current='true'] {
+    border-color: var(--accent);
+  }
+
+  &:hover {
+    border-color: var(--border);
+  }
+}
+
+.image {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.none {
+  color: var(--text-muted);
+}

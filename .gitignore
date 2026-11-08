@@ -1,6 +1,6 @@
-# Rules specific to each app live in apps/*/.gitignore
-node_modules/
-.env
-.env.local
-*.log
+# Regras compartilhadas; cada projeto tem o seu próprio .gitignore em projetos/<nome>/
 .DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.log

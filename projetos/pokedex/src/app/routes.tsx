@@ -12,4 +12,4 @@ export const router = createBrowserRouter([
     children: [{ path: 'pokemon/:id', element: null }],
   },
   { path: '*', element: <DashboardPage /> },
-])
+], { basename: import.meta.env.BASE_URL })

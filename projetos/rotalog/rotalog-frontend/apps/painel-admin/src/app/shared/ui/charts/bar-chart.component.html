@@ -1,0 +1,44 @@
+<figure class="grafico">
+  <ul class="barras" aria-hidden="true">
+    @for (b of barras(); track b.rotulo) {
+      <li class="barra">
+        <span class="barra__rotulo">{{ b.rotulo }}</span>
+        <span class="barra__trilho">
+          <span class="barra__preenchimento" [style.width.%]="b.largura" [style.--cor]="b.cor"></span>
+        </span>
+        <span class="barra__valor">{{ b.valor }}</span>
+      </li>
+    }
+  </ul>
+
+  <figcaption>
+    @if (total() > 0) {
+      Total: {{ total() }} {{ nomeDaUnidade() }}
+    } @else {
+      Sem dados.
+    }
+  </figcaption>
+
+  <!-- O contêiner (1 px, recortado) é quem se esconde: uma <table> ignora width e estouraria a página. -->
+  <div class="visually-hidden">
+  <table>
+    <caption>{{ titulo() }}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Categoria</th>
+        <th scope="col">Quantidade</th>
+        <th scope="col">Percentual</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (b of barras(); track b.rotulo) {
+        <tr>
+          <th scope="row">{{ b.rotulo }}</th>
+          <td>{{ b.valor }}</td>
+          <td>{{ b.percentual }}%</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  </div>
+</figure>

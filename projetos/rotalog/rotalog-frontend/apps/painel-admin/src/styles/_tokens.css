@@ -1,0 +1,221 @@
+/*
+ * Tokens de design (ADR 0001, D4; plano visual).
+ * Contraste conferido por cálculo (WCAG 2.1): texto >= 4,5:1, componentes >= 3:1.
+ * Tema escuro: automático (prefers-color-scheme) ou forçado por data-theme="dark"/"light" no <html>.
+ */
+:root {
+  color-scheme: light;
+
+  /* Superfícies e texto */
+  --cor-fundo: #f0f2f5;
+  --cor-superficie: #ffffff;
+  --cor-superficie-alt: #f5f5f5;
+  --cor-borda: #dddddd;
+  --cor-zebra: #fafafa; /* linhas pares das tabelas: decorativa */
+  --cor-borda-forte: #8c8c8c; /* bordas de campos: 3,2:1 sobre branco */
+  --cor-texto: #333333; /* 15,9:1 */
+  --cor-texto-suave: #555555; /* 9,1:1 */
+  --cor-texto-mudo: #666666; /* 5,9:1 */
+
+  /* Marca */
+  --cor-primaria: #1565c0; /* texto branco: 5,8:1 */
+  --cor-primaria-hover: #0d47a1;
+  --cor-primaria-texto: #ffffff;
+  --cor-primaria-suave: #e3f2fd;
+  --cor-link: #1565c0;
+  --cor-foco: #1565c0;
+
+  /* Sidebar (mantém a identidade atual) */
+  --cor-sidebar: #1a1a2e;
+  --cor-sidebar-hover: #16213e;
+  --cor-sidebar-ativo: #0f3460;
+  --cor-sidebar-destaque: #4fc3f7; /* 8,9:1 sobre a sidebar */
+  --cor-sidebar-texto: #cccccc;
+  --cor-sidebar-mudo: #999999; /* 6,9:1 sobre a sidebar */
+  --cor-sidebar-borda: #333333;
+
+  /* Tons semânticos: par fundo/texto, cada um >= 4,5:1 */
+  --tom-sucesso-fundo: #e8f5e9;
+  --tom-sucesso-texto: #2e7d32;
+  --tom-alerta-fundo: #fff3e0;
+  --tom-alerta-texto: #c44500; /* #e65100 original dava 3,5:1 */
+  --tom-perigo-fundo: #ffebee;
+  --tom-perigo-texto: #c62828;
+  --tom-info-fundo: #e3f2fd;
+  --tom-info-texto: #1565c0;
+  --tom-neutro-fundo: #eceff3;
+  --tom-neutro-texto: #3d4656;
+  --cor-perigo: #c62828; /* botão de perigo: texto branco 6,5:1 */
+  --cor-perigo-hover: #b71c1c;
+
+  /* Tipografia (rem: respeita o tamanho de fonte do usuário) */
+  --fonte: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --fs-xs: 0.75rem; /* 12px: mínimo permitido */
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --peso-medio: 500;
+  --peso-forte: 600;
+  --altura-linha: 1.55;
+
+  /* Espaçamento */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+
+  /* Formas */
+  --raio-sm: 0.375rem;
+  --raio-md: 0.5rem;
+  --raio-card: 0.75rem;
+  --raio-pill: 999px;
+
+  /* Elevação em 3 níveis (ADR 0003, D1): 1 = cartão, 2 = toast/menu, 3 = diálogo */
+  --elev-1: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --elev-2: 0 4px 14px rgba(16, 24, 40, 0.14);
+  --elev-3: 0 8px 24px rgba(16, 24, 40, 0.18);
+  --sombra-card: var(--elev-1);
+  --sombra-alta: var(--elev-3);
+
+  /*
+   * Gráficos (ADR 0003, D1): 6 cores categóricas, cada uma >= 3:1 contra as superfícies
+   * e com diferença de cor (CIE76) >= 15 entre qualquer par, inclusive para protanopia,
+   * deuteranopia e tritanopia. Cor nunca é o único sinal: todo gráfico tem rótulo e tabela.
+   */
+  --grafico-1: #0c7cdf;
+  --grafico-2: #984e16;
+  --grafico-3: #089156;
+  --grafico-4: #6e0cdf;
+  --grafico-5: #a57609;
+  --grafico-6: #f20d93;
+  --grafico-sem-dado: var(--cor-borda-forte);
+
+  /*
+   * Densidade (ADR 0003, D1): 1 = confortável (padrão). A compacta (data-densidade="compacta"
+   * no <html>) reduz o espaço das tabelas, mas o alvo de clique nunca cai de 2,25rem (36px),
+   * acima do mínimo de 24px do WCAG 2.2.
+   */
+  --densidade: 1;
+  --tabela-celula-y: calc(0.875rem * var(--densidade));
+  --tabela-celula-x: calc(1rem * var(--densidade));
+  --alvo-minimo: max(2.25rem, calc(2.75rem * var(--densidade)));
+
+  /* Movimento: zerado por prefers-reduced-motion (base.css) */
+  --duracao-curta: 0.15s;
+  --duracao-media: 0.2s;
+  --easing: ease;
+  --transicao: var(--duracao-curta) var(--easing);
+
+  /* Esqueleto de carregamento (decorativo, aria-hidden): sem exigência de contraste */
+  --skeleton-base: #e6e8ec;
+  --skeleton-brilho: rgba(255, 255, 255, 0.65);
+  --duracao-skeleton: 1.4s;
+
+  /* Layout */
+  --largura-sidebar: 15.625rem;
+  --largura-sidebar-recolhida: 4.5rem;
+}
+
+:root[data-densidade='compacta'] {
+  --densidade: 0.75;
+}
+
+/* Tema escuro automático, a menos que o usuário tenha forçado o claro */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --cor-fundo: #11141c;
+    --cor-superficie: #1b1f2b;
+    --cor-superficie-alt: #222736;
+    --cor-borda: #2e3445;
+    --cor-zebra: #1f2432;
+    --cor-borda-forte: #7a8399; /* 3,6:1 sobre a superfície */
+    --cor-texto: #e8eaf0; /* 13,6:1 */
+    --cor-texto-suave: #c0c6d4; /* 9,3:1 */
+    --cor-texto-mudo: #a0a8ba; /* 6,5:1 */
+    --cor-primaria: #64b5f6; /* texto escuro sobre ela: 8,0:1 */
+    --cor-primaria-hover: #90caf9;
+    --cor-primaria-texto: #0b1220;
+    --cor-primaria-suave: #16304d;
+    --cor-link: #8ec5fb;
+    --cor-foco: #9ecbff;
+    --cor-sidebar: #0d0f18;
+    --cor-sidebar-hover: #161a2a;
+    --cor-sidebar-ativo: #12284a;
+    --cor-sidebar-borda: #232738;
+    --tom-sucesso-fundo: #17301f;
+    --tom-sucesso-texto: #86d19a;
+    --tom-alerta-fundo: #3a2a10;
+    --tom-alerta-texto: #ffbd5c;
+    --tom-perigo-fundo: #3d1c1c;
+    --tom-perigo-texto: #ff9a92;
+    --tom-info-fundo: #12304d;
+    --tom-info-texto: #9dcdfa;
+    --tom-neutro-fundo: #262b38;
+    --tom-neutro-texto: #b9c2cf;
+    --cor-perigo: #ff8a80; /* texto escuro sobre ela: 8,3:1 */
+    --cor-perigo-hover: #ffb4ab;
+    --elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.35);
+    --elev-2: 0 4px 14px rgba(0, 0, 0, 0.5);
+    --elev-3: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --grafico-1: #64c6f7;
+    --grafico-2: #f5813d;
+    --grafico-3: #64f7ad;
+    --grafico-4: #a964f7;
+    --grafico-5: #f7de64;
+    --grafico-6: #f6519b;
+    --skeleton-base: #2a3042;
+    --skeleton-brilho: rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* Tema escuro forçado pelo usuário (mesmos valores do bloco acima) */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --cor-fundo: #11141c;
+  --cor-superficie: #1b1f2b;
+  --cor-superficie-alt: #222736;
+  --cor-borda: #2e3445;
+  --cor-zebra: #1f2432;
+  --cor-borda-forte: #7a8399;
+  --cor-texto: #e8eaf0;
+  --cor-texto-suave: #c0c6d4;
+  --cor-texto-mudo: #a0a8ba;
+  --cor-primaria: #64b5f6;
+  --cor-primaria-hover: #90caf9;
+  --cor-primaria-texto: #0b1220;
+  --cor-primaria-suave: #16304d;
+  --cor-link: #8ec5fb;
+  --cor-foco: #9ecbff;
+  --cor-sidebar: #0d0f18;
+  --cor-sidebar-hover: #161a2a;
+  --cor-sidebar-ativo: #12284a;
+  --cor-sidebar-borda: #232738;
+  --tom-sucesso-fundo: #17301f;
+  --tom-sucesso-texto: #86d19a;
+  --tom-alerta-fundo: #3a2a10;
+  --tom-alerta-texto: #ffbd5c;
+  --tom-perigo-fundo: #3d1c1c;
+  --tom-perigo-texto: #ff9a92;
+  --tom-info-fundo: #12304d;
+  --tom-info-texto: #9dcdfa;
+  --tom-neutro-fundo: #262b38;
+  --tom-neutro-texto: #b9c2cf;
+  --cor-perigo: #ff8a80;
+  --cor-perigo-hover: #ffb4ab;
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --elev-2: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --elev-3: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --grafico-1: #64c6f7;
+  --grafico-2: #f5813d;
+  --grafico-3: #64f7ad;
+  --grafico-4: #a964f7;
+  --grafico-5: #f7de64;
+  --grafico-6: #f6519b;
+  --skeleton-base: #2a3042;
+  --skeleton-brilho: rgba(255, 255, 255, 0.07);
+}

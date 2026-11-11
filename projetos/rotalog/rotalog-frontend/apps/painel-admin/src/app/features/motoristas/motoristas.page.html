@@ -1,0 +1,121 @@
+<div class="page">
+  <app-page-header titulo="Gestão de Motoristas">
+    <button appButton (click)="mostrarFormulario()">+ Novo Motorista</button>
+  </app-page-header>
+
+  <div class="filters">
+    <input
+      type="text"
+      aria-label="Buscar por nome ou CNH"
+      placeholder="Buscar por nome ou CNH..."
+      [ngModel]="filtros().q"
+      (ngModelChange)="digitar($event)"
+    />
+    <select aria-label="Filtrar por status" [ngModel]="filtros().status" (ngModelChange)="filtrarStatus($event)">
+      <option value="">Todos os Status</option>
+      <option value="ATIVO">Ativo</option>
+      <option value="INATIVO">Inativo</option>
+      <option value="FERIAS">Férias</option>
+    </select>
+    <div class="filters__acoes">
+      @if (temFiltro()) {
+        <button appButton variante="secondary" [pequeno]="true" (click)="limparFiltros()">Limpar filtros</button>
+      }
+      <app-density-toggle />
+    </div>
+  </div>
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregarMotoristas()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-skeleton variante="tabela" [linhas]="5" [colunas]="7" rotulo="Carregando motoristas..." />
+  } @else if (!mostrandoForm()) {
+    @if (pagina().total > 0) {
+      <app-data-table legenda="Lista de motoristas" [rolavel]="pagina().tamanho > 10">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th scope="col">CNH</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Validade CNH</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (motorista of pagina().itens; track motorista.id) {
+            <tr [class.cnh-vencida]="isCnhVencida(motorista)">
+              <td data-label="ID">{{ motorista.id }}</td>
+              <td data-label="Nome"><strong>{{ motorista.nome }}</strong></td>
+              <td data-label="CNH">{{ motorista.cnh }}</td>
+              <td data-label="Categoria">{{ motorista.categoria_cnh }}</td>
+              <td data-label="Validade CNH" [class.text-danger]="isCnhVencida(motorista)">
+                {{ motorista.validade_cnh }}
+                @if (isCnhVencida(motorista)) {
+                  <span class="badge-danger">VENCIDA</span>
+                }
+              </td>
+              <td data-label="Status"><app-status-badge dominio="motorista" [valor]="motorista.status" /></td>
+              <td data-label="Ações">
+                <div class="actions">
+                  <button appButton variante="secondary" [pequeno]="true" (click)="editarMotorista(motorista)">
+                    Editar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </app-data-table>
+      <app-paginator
+        itens="motoristas"
+        [total]="pagina().total"
+        [pagina]="pagina().pagina"
+        [tamanho]="pagina().tamanho"
+        (paginaChange)="irParaPagina($event)"
+        (tamanhoChange)="mudarTamanho($event)"
+      />
+    } @else if (!erro()) {
+      <app-empty-state mensagem="Nenhum motorista encontrado." />
+    }
+  }
+
+  @if (mostrandoForm()) {
+    <section class="form-container" aria-labelledby="titulo-form">
+      <h2 id="titulo-form" tabindex="-1" appFocoAoAbrir (fechar)="cancelarForm()">{{ editando() ? 'Editar Motorista' : 'Novo Motorista' }}</h2>
+      <form [formGroup]="form" (submit)="salvarMotorista($event)">
+        <div class="form-grid">
+          <app-form-field label="Nome" [obrigatorio]="true" [erro]="erroDe('nome')">
+            <input appControl type="text" formControlName="nome" />
+          </app-form-field>
+          <app-form-field label="CNH" [obrigatorio]="true" [erro]="erroDe('cnh')">
+            <input appControl type="text" formControlName="cnh" />
+          </app-form-field>
+          <app-form-field label="Categoria CNH">
+            <select appControl formControlName="categoria_cnh">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="AB">AB</option>
+            </select>
+          </app-form-field>
+          <app-form-field label="Validade CNH">
+            <input appControl type="date" formControlName="validade_cnh" />
+          </app-form-field>
+        </div>
+        <div class="form-actions">
+          <button appButton tipo="submit">{{ editando() ? 'Atualizar' : 'Cadastrar' }}</button>
+          <button appButton variante="secondary" (click)="cancelarForm()">Cancelar</button>
+        </div>
+      </form>
+    </section>
+  }
+</div>

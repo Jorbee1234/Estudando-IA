@@ -1,0 +1,25 @@
+<div class="page page--estreita">
+  <app-page-header titulo="Entrar" />
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+    </div>
+  }
+
+  <section class="form-container" aria-label="Acesso ao painel">
+    <form [formGroup]="form" (submit)="entrar($event)">
+      <div class="form-grid">
+        <app-form-field label="Usuário" [obrigatorio]="true" [erro]="erroDe('usuario')">
+          <input appControl type="text" formControlName="usuario" autocomplete="username" />
+        </app-form-field>
+        <app-form-field label="Senha" [obrigatorio]="true" [erro]="erroDe('senha')">
+          <input appControl type="password" formControlName="senha" autocomplete="current-password" />
+        </app-form-field>
+      </div>
+      <div class="form-actions">
+        <button appButton tipo="submit" [disabled]="enviando()">{{ enviando() ? 'Entrando...' : 'Entrar' }}</button>
+      </div>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,21 @@
+.form { display: flex; flex-direction: column; gap: var(--espaco-2); }
+.linha { display: flex; gap: var(--espaco-2); }
+.rotulo { font-weight: var(--peso-semibold); font-size: var(--texto-sm); color: var(--cor-texto); text-align: left; }
+.campo { flex: 1; min-width: 0; padding: 0 var(--espaco-4); border: 1px solid var(--cor-borda); border-radius: var(--raio-2); font: inherit; font-size: var(--texto-md); background: var(--cor-superficie); color: var(--cor-texto); }
+.botao { display: inline-flex; align-items: center; justify-content: center; gap: var(--espaco-2); background: var(--cor-primaria); color: #fff; border: 0; padding: 0 var(--espaco-5); border-radius: var(--raio-2); font: inherit; font-weight: var(--peso-semibold); font-size: var(--texto-md); cursor: pointer; transition: background-color var(--transicao-rapida); }
+.botao:hover:not(:disabled) { background: var(--cor-primaria-hover); }
+.botao:disabled { background: var(--cor-texto-suave); cursor: not-allowed; }
+
+.hero .campo, .hero .botao { min-height: 3.25rem; }
+.hero .campo { box-shadow: var(--sombra-1); }
+.compacta .campo, .compacta .botao { min-height: var(--alvo-toque); }
+.compacta .campo { border-color: transparent; }
+
+@media (max-width: 480px) {
+  .hero .linha { flex-direction: column; }
+}
+
+/* No cabeçalho (fundo verde) o botão precisa inverter as cores. */
+.compacta .botao { background: var(--cor-superficie); color: var(--cor-primaria); }
+.compacta .botao:hover:not(:disabled) { background: var(--cor-primaria-suave); }
+.compacta .botao:disabled { background: rgb(255 255 255 / 25%); color: #fff; }

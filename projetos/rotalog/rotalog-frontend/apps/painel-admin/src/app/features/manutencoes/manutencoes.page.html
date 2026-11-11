@@ -1,0 +1,62 @@
+<div class="page">
+  <app-page-header titulo="Manutenções">
+    <!-- TODO: Botão não funciona - funcionalidade não implementada -->
+    <button appButton (click)="avisarNaoImplementado()">+ Nova Manutenção</button>
+  </app-page-header>
+
+  <div class="filters">
+    <div class="filters__acoes">
+      <app-density-toggle />
+    </div>
+  </div>
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregarManutencoes()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-skeleton variante="tabela" [linhas]="5" [colunas]="8" rotulo="Carregando manutenções..." />
+  } @else if (pagina().total > 0) {
+    <app-data-table legenda="Lista de manutenções" [rolavel]="pagina().tamanho > 10">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Veículo ID</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Descrição</th>
+          <th scope="col">Data Agendada</th>
+          <th scope="col">Data Realizada</th>
+          <th scope="col" class="col-num">Custo</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (manutencao of pagina().itens; track manutencao.id) {
+          <tr>
+            <td data-label="ID">{{ manutencao.id }}</td>
+            <td data-label="Veículo ID">{{ manutencao.veiculo_id }}</td>
+            <td data-label="Tipo">{{ manutencao.tipo }}</td>
+            <td data-label="Descrição">{{ manutencao.descricao }}</td>
+            <td data-label="Data Agendada">{{ manutencao.data_agendada }}</td>
+            <td data-label="Data Realizada">{{ manutencao.data_realizada || 'Pendente' }}</td>
+            <td data-label="Custo" class="col-num">R$ {{ manutencao.custo | number: '1.2-2' }}</td>
+            <td data-label="Status"><app-status-badge dominio="manutencao" [valor]="manutencao.status" /></td>
+          </tr>
+        }
+      </tbody>
+    </app-data-table>
+    <app-paginator
+      itens="manutenções"
+      [total]="pagina().total"
+      [pagina]="pagina().pagina"
+      [tamanho]="pagina().tamanho"
+      (paginaChange)="irParaPagina($event)"
+      (tamanhoChange)="mudarTamanho($event)"
+    />
+  } @else if (!erro()) {
+    <app-empty-state mensagem="Nenhuma manutenção encontrada." />
+  }
+</div>

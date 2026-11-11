@@ -1,0 +1,82 @@
+<div
+  class="sidebar"
+  id="barra-lateral"
+  [class.aberta]="aberto()"
+  [class.recolhida]="recolhida()"
+  [class.sem-dicas]="semDicas()"
+>
+  <div class="sidebar-header">
+    <div class="marca">
+      <p class="logo">
+        <span class="logo-completo">RotaLog</span>
+        <span class="logo-curto" aria-hidden="true">RL</span>
+      </p>
+      <span class="subtitle">Painel Administrativo</span>
+    </div>
+    <button
+      type="button"
+      class="btn btn--icon menu-toggle"
+      aria-controls="menu-principal"
+      [attr.aria-expanded]="aberto()"
+      (click)="alternar()"
+    >
+      <span aria-hidden="true">{{ aberto() ? '✕' : '☰' }}</span>
+      <span class="visually-hidden">{{ aberto() ? 'Fechar menu' : 'Abrir menu' }}</span>
+    </button>
+  </div>
+
+  <div class="sidebar-corpo" id="menu-principal">
+    <nav aria-label="Navegação principal">
+      <ul class="nav-menu">
+        @for (item of itens; track item.rota) {
+          <li>
+            <a
+              [routerLink]="item.rota"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+              [attr.data-rotulo]="item.rotulo"
+              (click)="fechar()"
+              (pointerenter)="reexibirDicas()"
+            >
+              <span class="icon" aria-hidden="true">{{ item.icone }}</span>
+              <span class="rotulo">{{ item.rotulo }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button
+        type="button"
+        class="btn btn--secondary btn--sm recolher-toggle"
+        aria-controls="barra-lateral"
+        [attr.aria-expanded]="!recolhida()"
+        [attr.data-rotulo]="recolhida() ? 'Expandir menu' : 'Recolher menu'"
+        (click)="alternarRecolhida()"
+        (pointerenter)="reexibirDicas()"
+      >
+        <span aria-hidden="true">{{ recolhida() ? '»' : '«' }}</span>
+        <span class="rotulo">{{ recolhida() ? 'Expandir menu' : 'Recolher menu' }}</span>
+      </button>
+      <app-theme-toggle />
+      @if (auth.ativa && auth.autenticado()) {
+        <div class="usuario">
+          <span class="avatar" aria-hidden="true">{{ inicial() }}</span>
+          <span class="rotulo usuario-nome">{{ auth.usuario() ?? 'Usuário' }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn btn--secondary btn--sm"
+          data-rotulo="Sair"
+          (click)="sair()"
+          (pointerenter)="reexibirDicas()"
+        >
+          <span aria-hidden="true">⎋</span>
+          <span class="rotulo">Sair</span>
+        </button>
+      }
+      <p class="versao">v1.0.0 - Legado</p>
+    </div>
+  </div>
+</div>

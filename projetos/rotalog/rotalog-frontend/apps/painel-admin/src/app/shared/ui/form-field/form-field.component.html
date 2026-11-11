@@ -1,0 +1,15 @@
+<div class="form-field">
+  <label [for]="id">
+    {{ label() }}
+    @if (obrigatorio()) {
+      <span class="obrigatorio" aria-hidden="true">*</span>
+      <span class="visually-hidden">(obrigatório)</span>
+    }
+  </label>
+  <ng-content />
+  @if (erro()) {
+    <p class="form-error" [id]="idMensagem" role="alert">{{ erro() }}</p>
+  } @else if (ajuda()) {
+    <p class="form-hint" [id]="idMensagem">{{ ajuda() }}</p>
+  }
+</div>

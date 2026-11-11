@@ -1,0 +1,10 @@
+.lista { list-style: none; margin: 0; padding: 0; }
+.item { position: relative; display: flex; gap: var(--espaco-3); padding-bottom: var(--espaco-4); }
+/* Linha vertical ligando os eventos */
+.item:not(:last-child)::before { content: ''; position: absolute; left: 0.95rem; top: 2rem; bottom: 0; width: 2px; background: var(--cor-borda-suave); }
+.icone { flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--cor-primaria-suave); color: var(--cor-primaria); }
+.corpo { display: flex; flex-direction: column; gap: 0.125rem; min-width: 0; padding-top: 0.25rem; }
+.evento { font-weight: var(--peso-semibold); font-size: var(--texto-sm); }
+.descricao { color: var(--cor-texto-suave); font-size: var(--texto-sm); overflow-wrap: anywhere; }
+.hora { color: var(--cor-texto-suave); font-size: var(--texto-xs); }
+.vazio { color: var(--cor-texto-suave); font-size: var(--texto-sm); }

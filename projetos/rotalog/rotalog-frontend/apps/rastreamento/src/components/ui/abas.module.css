@@ -1,0 +1,4 @@
+.abas { display: flex; gap: var(--espaco-1); padding: var(--espaco-1); background: var(--cinza-200); border-radius: var(--raio-3); }
+.aba { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: var(--espaco-2); min-height: var(--alvo-toque); background: transparent; border: 0; border-radius: var(--raio-2); font: inherit; font-size: var(--texto-sm); font-weight: var(--peso-semibold); color: var(--cor-texto-suave); cursor: pointer; transition: background-color var(--transicao-rapida), color var(--transicao-rapida); }
+.aba:hover { color: var(--cor-texto); }
+.selecionada { background: var(--cor-superficie); color: var(--cor-primaria); box-shadow: var(--sombra-1); }

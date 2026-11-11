@@ -1,0 +1,168 @@
+/*
+ * Gráficos (ADR 0003, D4): rosca em SVG e barras em HTML/CSS. As cores vêm dos tokens
+ * --grafico-1 a 6 (contraste e separação para daltônicos validados em tokens-contraste.spec).
+ * O desenho é aria-hidden; a informação para leitor de tela está na tabela oculta de cada gráfico.
+ */
+.grafico {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin: 0;
+}
+
+.grafico figcaption {
+  font-size: var(--fs-sm);
+  color: var(--cor-texto-suave);
+}
+
+/* Rosca */
+.donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-5);
+}
+
+.donut__svg {
+  flex: none;
+  width: 9rem;
+  height: 9rem;
+}
+
+.donut__fundo,
+.donut__segmento {
+  fill: none;
+  stroke-width: 5;
+}
+
+.donut__fundo {
+  stroke: var(--cor-borda);
+}
+
+.donut__total {
+  font-size: 7px;
+  font-weight: 700;
+  fill: var(--cor-texto);
+}
+
+.donut__unidade {
+  font-size: 2.6px;
+  fill: var(--cor-texto-mudo);
+}
+
+.legenda {
+  flex: 1 1 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+}
+
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.legenda__cor {
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--cor);
+  border-radius: 3px;
+}
+
+.legenda strong {
+  margin-left: auto;
+  padding-left: var(--esp-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.legenda__pct {
+  font-weight: 400;
+  color: var(--cor-texto-mudo);
+}
+
+/* Barras */
+.barras {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barra {
+  display: grid;
+  grid-template-columns: minmax(5rem, 7rem) minmax(0, 1fr) 2.5rem;
+  align-items: center;
+  gap: var(--esp-3);
+  font-size: var(--fs-sm);
+}
+
+.barra__trilho {
+  height: 1.25rem;
+  overflow: hidden;
+  background: var(--cor-borda);
+  border-radius: var(--raio-sm);
+}
+
+.barra__preenchimento {
+  display: block;
+  height: 100%;
+  background: var(--cor);
+  border-radius: var(--raio-sm);
+}
+
+.barra__valor {
+  text-align: right;
+  font-weight: var(--peso-forte);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dashboard (ADR 0003, D4): grade de cartões, cabeçalho de seção com ação e alertas */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: var(--esp-5);
+  margin-bottom: var(--esp-5);
+  align-items: start;
+}
+
+/* Os cartões da grade já têm margem própria do esqueleto: a grade controla o espaço */
+.dashboard-grid > .skeleton {
+  margin-bottom: 0;
+}
+
+.dashboard-grid .card h2 {
+  margin-bottom: var(--esp-4);
+}
+
+.secao-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-4);
+}
+
+.secao-cabecalho h2 {
+  margin: 0;
+}
+
+.alert-message,
+.alert-message:hover {
+  color: inherit;
+}
+
+.alert-mais,
+.sem-alertas {
+  margin: var(--esp-3) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--cor-texto-suave);
+}

@@ -1,0 +1,97 @@
+/* Formulários e filtros (ADR 0001, D4/D6). */
+.form-container {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+  padding: var(--esp-5);
+  box-shadow: var(--sombra-card);
+}
+
+.form-container h2 {
+  margin-bottom: var(--esp-4);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-5);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.form-field > label,
+.form-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--peso-forte);
+  color: var(--cor-texto-suave);
+}
+
+.form-field .obrigatorio {
+  color: var(--cor-perigo);
+}
+
+.form-hint {
+  font-size: var(--fs-xs);
+  color: var(--cor-texto-mudo);
+}
+
+.form-error {
+  font-size: var(--fs-xs);
+  color: var(--tom-perigo-texto);
+  font-weight: var(--peso-medio);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+}
+
+.input,
+.form-field input,
+.form-field select,
+.form-field textarea,
+.filters input,
+.filters select {
+  min-height: var(--alvo-minimo);
+  padding: var(--esp-2) var(--esp-3);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-sm);
+  font-size: var(--fs-sm);
+}
+
+.form-field input[aria-invalid='true'],
+.form-field select[aria-invalid='true'] {
+  border-color: var(--cor-perigo);
+}
+
+input::placeholder {
+  color: var(--cor-texto-mudo);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-5);
+}
+
+.filters input {
+  flex: 1 1 14rem;
+}
+
+/* Barra de filtros: ações à direita (limpar filtros, densidade) */
+.filters__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-left: auto;
+}

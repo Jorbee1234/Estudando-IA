@@ -1,0 +1,44 @@
+<nav class="paginador" [attr.aria-label]="'Paginação de ' + itens()">
+  <p class="paginador__resumo" aria-live="polite" aria-atomic="true">
+    @if (total() === 0) {
+      Nenhum item
+    } @else {
+      {{ de() }}–{{ ate() }} de {{ total() }}
+    }
+  </p>
+
+  @if (comControles()) {
+    <div class="paginador__tamanho">
+      <label [for]="id + '-tam'">Por página</label>
+      <select [id]="id + '-tam'" (change)="mudarTamanho($event)">
+        @for (t of tamanhos(); track t) {
+          <option [value]="t" [selected]="t === tamanho()">{{ t }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="paginador__nav">
+      <button
+        appButton
+        variante="secondary"
+        [pequeno]="true"
+        [disabled]="atual() <= 1"
+        aria-label="Página anterior"
+        (click)="ir(atual() - 1)"
+      >
+        <span aria-hidden="true">‹</span> Anterior
+      </button>
+      <span class="paginador__pagina">Página {{ atual() }} de {{ totalPaginas() }}</span>
+      <button
+        appButton
+        variante="secondary"
+        [pequeno]="true"
+        [disabled]="atual() >= totalPaginas()"
+        aria-label="Próxima página"
+        (click)="ir(atual() + 1)"
+      >
+        Próxima <span aria-hidden="true">›</span>
+      </button>
+    </div>
+  }
+</nav>

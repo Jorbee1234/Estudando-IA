@@ -1,0 +1,9 @@
+<a class="skip-link" href="#conteudo" (click)="irParaConteudo($event)">Pular para o conteúdo</a>
+@if (comMenu()) {
+  <app-sidebar />
+}
+<main id="conteudo" class="main-wrapper" tabindex="-1">
+  <router-outlet />
+</main>
+<app-toaster />
+<app-confirm-dialog />

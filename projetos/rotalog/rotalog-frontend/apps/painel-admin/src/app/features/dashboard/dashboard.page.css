@@ -1,0 +1,115 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--esp-5);
+  margin-bottom: var(--esp-6);
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+  text-decoration: none;
+  transition: transform var(--duracao-media) var(--easing), box-shadow var(--duracao-media) var(--easing);
+}
+
+/* Mouse ou foco por teclado levantam o cartão; ao clicar ele assenta */
+.stat-card:hover,
+.stat-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-alta);
+}
+
+.stat-card:active {
+  transform: translateY(0);
+  box-shadow: var(--sombra-card);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  margin-bottom: var(--esp-2);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  margin-top: var(--esp-1);
+  font-size: var(--fs-sm);
+  color: var(--cor-texto-mudo);
+}
+
+.stat-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  margin-top: var(--esp-3);
+  font-size: var(--fs-sm);
+}
+
+.stat-detail .active {
+  color: var(--tom-sucesso-texto);
+}
+
+.stat-detail .inactive {
+  color: var(--tom-perigo-texto);
+}
+
+.stat-detail .warning {
+  color: var(--tom-alerta-texto);
+}
+
+.secao {
+  margin-bottom: var(--esp-5);
+}
+
+.secao h2 {
+  margin-bottom: var(--esp-4);
+}
+
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-3);
+  border-radius: var(--raio-md);
+  font-size: var(--fs-sm);
+  color: var(--cor-texto);
+}
+
+.alert-danger {
+  background: var(--tom-perigo-fundo);
+}
+
+.alert-warning {
+  background: var(--tom-alerta-fundo);
+}
+
+.alert-info {
+  background: var(--tom-info-fundo);
+}
+
+.alert-message {
+  flex: 1;
+}
+
+.alert-date {
+  color: var(--cor-texto-mudo);
+  font-size: var(--fs-xs);
+}

@@ -1,0 +1,55 @@
+@if (anunciar() && rotulo()) {
+  <p class="visually-hidden" role="status">{{ rotulo() }}</p>
+}
+
+<div class="skeleton skeleton--{{ variante() }}" aria-hidden="true">
+  @switch (variante()) {
+    @case ('linha') {
+      @for (i of seqLinhas(); track i) {
+        <span class="skeleton-bloco skeleton-barra" [class.skeleton-barra--curta]="i === seqLinhas().length - 1 && seqLinhas().length > 1"></span>
+      }
+    }
+    @case ('cartao') {
+      <span class="skeleton-bloco skeleton-titulo"></span>
+      @for (i of seqLinhas(); track i) {
+        <span class="skeleton-bloco skeleton-barra" [class.skeleton-barra--curta]="i === seqLinhas().length - 1"></span>
+      }
+    }
+    @case ('estatisticas') {
+      <div class="skeleton-estatisticas" [class.skeleton-estatisticas--compacto]="compacto()">
+        @for (i of seqColunas(); track i) {
+          <div class="skeleton-cartao-estat">
+            @if (!compacto()) {
+              <span class="skeleton-bloco skeleton-icone"></span>
+            }
+            <span class="skeleton-bloco skeleton-valor"></span>
+            <span class="skeleton-bloco skeleton-barra skeleton-barra--curta"></span>
+            @if (!compacto()) {
+              <span class="skeleton-bloco skeleton-barra skeleton-barra--media"></span>
+            }
+          </div>
+        }
+      </div>
+    }
+    @case ('tabela') {
+      <div class="skeleton-tabela">
+        <div class="skeleton-tabela__linha skeleton-tabela__cabecalho" [style.--colunas]="colunas()">
+          @for (c of seqColunas(); track c) {
+            <span class="skeleton-bloco skeleton-barra skeleton-barra--fina"></span>
+          }
+        </div>
+        @for (l of seqLinhas(); track l) {
+          <div class="skeleton-tabela__linha" [style.--colunas]="colunas()">
+            @for (c of seqColunas(); track c) {
+              <span class="skeleton-bloco skeleton-barra" [class.skeleton-barra--curta]="(l + c) % 3 === 0"></span>
+            }
+          </div>
+        }
+      </div>
+    }
+    @case ('grafico') {
+      <span class="skeleton-bloco skeleton-titulo"></span>
+      <span class="skeleton-bloco skeleton-grafico" [style.height]="altura()"></span>
+    }
+  }
+</div>

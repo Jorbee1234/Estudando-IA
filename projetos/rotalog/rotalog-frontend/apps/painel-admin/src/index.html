@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>RotaLog - Painel Administrativo</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      CSP (ADR 0001, D5a): só o próprio host e as duas APIs. style-src precisa de
+      'unsafe-inline' porque o Angular injeta os estilos dos componentes em <style>.
+      Meta tag não aceita frame-ancestors nem report-uri: em produção a política vai
+      como cabeçalho no servidor que servir o build, com os hosts reais das APIs
+      (environment.prod.ts). Ver docs/adr/0001, D5a.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' http://localhost:8080 http://localhost:3000 ws://localhost:4200; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+/* Tabelas (ADR 0001, D4/D6; ADR 0003, D3): zebra suave, cabeçalho fixo quando rolável e,
+   abaixo de 40rem, cada linha vira um cartão (td com data-label). */
+.table-wrap {
+  overflow: auto;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+/* Muitas linhas (25/50 por página): altura limitada, rolagem por dentro e cabeçalho fixo */
+.table-wrap--rolavel {
+  max-height: min(75vh, 42rem);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--tabela-celula-y) var(--tabela-celula-x);
+  background: var(--cor-superficie-alt);
+  color: var(--cor-texto-suave);
+  font-size: var(--fs-xs);
+  font-weight: var(--peso-forte);
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.data-table td {
+  padding: var(--tabela-celula-y) var(--tabela-celula-x);
+  font-size: var(--fs-sm);
+  border-bottom: 1px solid var(--cor-borda);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: var(--cor-zebra);
+}
+
+.data-table tbody tr:hover {
+  background: var(--cor-superficie-alt);
+}
+
+/* Linha acionável: o acionamento por teclado vem de um link/botão na célula principal */
+.data-table tbody tr.is-clickable {
+  cursor: pointer;
+}
+
+.data-table .col-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table .actions {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+/* Cabeçalho ordenável: botão dentro do th, com aria-sort no th */
+.th-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  min-height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.th-sort:hover {
+  color: var(--cor-texto);
+}
+
+.th-sort .seta {
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+
+th[aria-sort='ascending'] .seta,
+th[aria-sort='descending'] .seta {
+  opacity: 1;
+  color: var(--cor-link);
+}
+
+/* Botão da célula principal: único ponto de teclado da linha. O ::after estica a área
+   clicável para a linha inteira, então o mouse continua funcionando sem (click) no <tr>. */
+.data-table tbody tr.is-clickable {
+  position: relative;
+}
+
+.row-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-link);
+  font: inherit;
+  font-weight: var(--peso-forte);
+  text-decoration: underline;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* Ações dentro da linha ficam acima da área esticada */
+.data-table tr.is-clickable .actions {
+  position: relative;
+  z-index: 1;
+}
+
+/* Telas estreitas: a tabela vira uma lista de cartões. O cabeçalho some (inclusive dos botões de
+   ordenação, que passam para o seletor "Ordenar por") e cada célula mostra o próprio rótulo. */
+@media (max-width: 40rem) {
+  .table-wrap {
+    max-height: none;
+    overflow: visible;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table tbody tr,
+  .data-table tbody tr:nth-child(even) {
+    margin-bottom: var(--esp-3);
+    padding: var(--esp-2) 0;
+    background: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-card);
+    box-shadow: var(--sombra-card);
+  }
+
+  .data-table td {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--esp-3);
+    padding: var(--esp-2) var(--esp-4);
+    text-align: left;
+    border-bottom: 0;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-size: var(--fs-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cor-texto-suave);
+  }
+
+  .data-table .col-num {
+    text-align: left;
+  }
+}
+
+/* Seletor "Ordenar por": só existe onde o cabeçalho ordenável desaparece */
+.ordenar-estreito {
+  display: none;
+}
+
+@media (max-width: 40rem) {
+  .ordenar-estreito {
+    display: block;
+    flex: 1 1 100%;
+  }
+
+  .ordenar-estreito select {
+    width: 100%;
+  }
+}
+
+/* Paginador */
+.paginador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3) var(--esp-5);
+  margin-top: var(--esp-4);
+  color: var(--cor-texto-suave);
+  font-size: var(--fs-sm);
+}
+
+.paginador__resumo {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.paginador__tamanho {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.paginador__tamanho select {
+  min-height: var(--alvo-minimo);
+  padding: var(--esp-1) var(--esp-2);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda-forte);
+  border-radius: var(--raio-sm);
+}
+
+.paginador__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-left: auto;
+}
+
+.paginador__pagina {
+  font-variant-numeric: tabular-nums;
+}

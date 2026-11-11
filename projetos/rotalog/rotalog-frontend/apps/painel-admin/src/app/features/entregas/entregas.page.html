@@ -1,0 +1,144 @@
+<div class="page">
+  <app-page-header titulo="Entregas">
+    <button appButton variante="secondary" (click)="carregarEntregas()">Atualizar</button>
+    <a class="btn btn--secondary" [href]="rastreamentoUrl" target="_blank" rel="noopener noreferrer">
+      Ver no rastreamento <span aria-hidden="true">↗</span>
+      <span class="visually-hidden">(abre em nova aba)</span>
+    </a>
+    <!-- TODO: Botão de nova entrega não implementado -->
+  </app-page-header>
+
+  <div class="filters">
+    <input
+      type="text"
+      aria-label="Buscar por código ou destino"
+      placeholder="Buscar por código ou destino..."
+      [ngModel]="filtros().q"
+      (ngModelChange)="digitar($event)"
+    />
+    <select aria-label="Filtrar por status" [ngModel]="filtros().status" (ngModelChange)="filtrarStatus($event)">
+      <option value="">Todos os Status</option>
+      <option value="PENDENTE">Pendente</option>
+      <option value="ATRIBUIDA">Atribuída</option>
+      <option value="EM_TRANSITO">Em Trânsito</option>
+      <option value="ENTREGUE">Entregue</option>
+      <option value="CANCELADA">Cancelada</option>
+    </select>
+    <div class="filters__acoes">
+      @if (temFiltro()) {
+        <button appButton variante="secondary" [pequeno]="true" (click)="limparFiltros()">Limpar filtros</button>
+      }
+      <app-density-toggle />
+    </div>
+  </div>
+
+  @if (!loading()) {
+    <dl class="stats-row">
+      <div class="mini-stat">
+        <dt class="mini-label">Total</dt>
+        <dd class="mini-value">{{ entregas().length }}</dd>
+      </div>
+      <div class="mini-stat">
+        <dt class="mini-label">Pendentes</dt>
+        <dd class="mini-value pending">{{ countByStatus('PENDENTE') }}</dd>
+      </div>
+      <div class="mini-stat">
+        <dt class="mini-label">Em Trânsito</dt>
+        <dd class="mini-value transit">{{ countByStatus('EM_TRANSITO') }}</dd>
+      </div>
+      <div class="mini-stat">
+        <dt class="mini-label">Entregues</dt>
+        <dd class="mini-value delivered">{{ countByStatus('ENTREGUE') }}</dd>
+      </div>
+    </dl>
+  } @else {
+    <app-skeleton variante="estatisticas" [colunas]="4" [compacto]="true" [anunciar]="false" />
+  }
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregarEntregas()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-skeleton variante="tabela" [linhas]="5" [colunas]="8" rotulo="Carregando entregas..." />
+  } @else if (pagina().total > 0) {
+    <app-data-table legenda="Lista de entregas" [rolavel]="pagina().tamanho > 10">
+      <thead>
+        <tr>
+          <th scope="col">Código</th>
+          <th scope="col">Status</th>
+          <th scope="col">Origem</th>
+          <th scope="col">Destino</th>
+          <th scope="col">Motorista</th>
+          <th scope="col">Veículo</th>
+          <th scope="col" class="col-num">Distância</th>
+          <th scope="col" class="col-num">Tempo Est.</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (entrega of pagina().itens; track entrega.id) {
+          <tr class="is-clickable">
+            <td data-label="Código"><button type="button" class="row-link" [attr.aria-label]="'Ver detalhes da entrega ' + entrega.codigo_rastreio" (click)="selecionarEntrega(entrega)">{{ entrega.codigo_rastreio }}</button></td>
+            <td data-label="Status"><app-status-badge dominio="entrega" [valor]="entrega.status" /></td>
+            <td data-label="Origem">{{ entrega.origem_endereco }}</td>
+            <td data-label="Destino">{{ entrega.destino_endereco }}</td>
+            <td data-label="Motorista">{{ entrega.motorista_nome }}</td>
+            <td data-label="Veículo">{{ entrega.veiculo_placa }}</td>
+            <td data-label="Distância" class="col-num">{{ entrega.distancia_km }} km</td>
+            <td data-label="Tempo Est." class="col-num">{{ entrega.tempo_estimado_minutos }} min</td>
+          </tr>
+        }
+      </tbody>
+    </app-data-table>
+    <app-paginator
+      itens="entregas"
+      [total]="pagina().total"
+      [pagina]="pagina().pagina"
+      [tamanho]="pagina().tamanho"
+      (paginaChange)="irParaPagina($event)"
+      (tamanhoChange)="mudarTamanho($event)"
+    />
+  } @else if (!erro()) {
+    <app-empty-state mensagem="Nenhuma entrega encontrada." />
+  }
+
+  @if (entregaSelecionada(); as entrega) {
+    <section class="card detail-panel" aria-labelledby="titulo-detalhe">
+      <div class="detail-header">
+        <h2 id="titulo-detalhe" tabindex="-1" appFocoAoAbrir (fechar)="fecharDetalhe()">Entrega {{ entrega.codigo_rastreio }}</h2>
+        <button appButton variante="icon" aria-label="Fechar detalhes" (click)="fecharDetalhe()">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+      <dl class="detail-grid">
+        <div>
+          <dt>Status</dt>
+          <dd><app-status-badge dominio="entrega" [valor]="entrega.status" /></dd>
+        </div>
+        <div>
+          <dt>Motorista</dt>
+          <dd>{{ entrega.motorista_nome }}</dd>
+        </div>
+        <div>
+          <dt>Veículo</dt>
+          <dd>{{ entrega.veiculo_placa }}</dd>
+        </div>
+        <div>
+          <dt>Origem</dt>
+          <dd>{{ entrega.origem_endereco }}</dd>
+        </div>
+        <div>
+          <dt>Destino</dt>
+          <dd>{{ entrega.destino_endereco }}</dd>
+        </div>
+        <div>
+          <dt>Distância</dt>
+          <dd>{{ entrega.distancia_km }} km</dd>
+        </div>
+      </dl>
+    </section>
+  }
+</div>

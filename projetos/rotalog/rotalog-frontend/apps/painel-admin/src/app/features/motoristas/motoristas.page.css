@@ -1,0 +1,20 @@
+.cnh-vencida {
+  background: var(--tom-perigo-fundo);
+}
+
+.text-danger {
+  color: var(--tom-perigo-texto);
+  font-weight: 600;
+}
+
+.badge-danger {
+  display: inline-block;
+  margin-left: var(--esp-2);
+  padding: 0.1rem 0.4rem;
+  background: var(--tom-perigo-fundo);
+  color: var(--tom-perigo-texto);
+  border: 1px solid currentColor;
+  border-radius: var(--raio-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}

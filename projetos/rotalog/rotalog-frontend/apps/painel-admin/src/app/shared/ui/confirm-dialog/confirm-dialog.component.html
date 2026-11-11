@@ -1,0 +1,18 @@
+@if (confirm.pedido(); as p) {
+  <dialog
+    #dialog
+    class="dialogo"
+    aria-labelledby="dialogo-titulo"
+    aria-describedby="dialogo-msg"
+    (cancel)="aoCancelar($event)"
+  >
+    <h2 id="dialogo-titulo">{{ p.titulo }}</h2>
+    <p id="dialogo-msg">{{ p.mensagem }}</p>
+    <div class="form-actions">
+      <button type="button" class="btn" [class.btn--danger]="p.perigo" [class.btn--primary]="!p.perigo" (click)="responder(true)">
+        {{ p.confirmar }}
+      </button>
+      <button type="button" class="btn btn--secondary" (click)="responder(false)">{{ p.cancelar }}</button>
+    </div>
+  </dialog>
+}

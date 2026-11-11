@@ -1,0 +1,40 @@
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-5);
+}
+
+.mini-stat {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: var(--esp-4);
+  background: var(--cor-superficie);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+  text-align: center;
+}
+
+.mini-value {
+  margin: 0;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.mini-value.pending {
+  color: var(--tom-alerta-texto);
+}
+
+.mini-value.transit {
+  color: var(--tom-info-texto);
+}
+
+.mini-value.delivered {
+  color: var(--tom-sucesso-texto);
+}
+
+.mini-label {
+  font-size: var(--fs-sm);
+  color: var(--cor-texto-mudo);
+}

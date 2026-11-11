@@ -1,0 +1,168 @@
+<div class="page">
+  <app-page-header titulo="Dashboard - Gestão de Frotas" />
+
+  @if (loading()) {
+    <p class="visually-hidden" role="status">Carregando dados...</p>
+    <app-skeleton variante="estatisticas" [colunas]="4" [anunciar]="false" />
+    <div class="dashboard-grid">
+      <app-skeleton variante="cartao" [linhas]="4" [anunciar]="false" />
+      <app-skeleton variante="grafico" [anunciar]="false" />
+    </div>
+    <app-skeleton variante="tabela" [linhas]="3" [colunas]="5" [anunciar]="false" />
+  }
+
+  @if (error(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregarDados()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <section aria-label="Resumo" class="stats-grid">
+      <a class="stat-card" routerLink="/veiculos">
+        <span class="stat-icon" aria-hidden="true">🚛</span>
+        <span class="stat-value">{{ totalVeiculos() }}</span>
+        <span class="stat-label">Veículos</span>
+        <span class="stat-detail">
+          <span class="active">{{ pluralizar(veiculosAtivos(), 'ativo', 'ativos') }}</span>
+          @if (veiculosEmManutencao() > 0) {
+            <span class="warning">{{ veiculosEmManutencao() }} em manutenção</span>
+          }
+          <span class="inactive">{{ pluralizar(veiculosInativos(), 'inativo', 'inativos') }}</span>
+        </span>
+      </a>
+
+      <a class="stat-card" routerLink="/motoristas">
+        <span class="stat-icon" aria-hidden="true">👤</span>
+        <span class="stat-value">{{ totalMotoristas() }}</span>
+        <span class="stat-label">Motoristas</span>
+        <span class="stat-detail">
+          <span class="active">{{ pluralizar(motoristasAtivos(), 'ativo', 'ativos') }}</span>
+          @if (motoristasEmFerias() > 0) {
+            <span>{{ motoristasEmFerias() }} de férias</span>
+          }
+          @if (cnhEmAtencao() > 0) {
+            <span class="inactive">{{ cnhEmAtencao() }} com CNH vencida ou a vencer</span>
+          }
+        </span>
+      </a>
+
+      <a class="stat-card" routerLink="/entregas">
+        <span class="stat-icon" aria-hidden="true">📦</span>
+        <span class="stat-value">{{ totalEntregas() }}</span>
+        <span class="stat-label">Entregas</span>
+        <span class="stat-detail">
+          <span class="active">{{ entregasEmAndamento() }} em andamento</span>
+        </span>
+      </a>
+
+      <a class="stat-card" routerLink="/manutencoes">
+        <span class="stat-icon" aria-hidden="true">🔧</span>
+        <span class="stat-value">{{ totalManutencoes() }}</span>
+        <span class="stat-label">Manutenções</span>
+        <span class="stat-detail">
+          <span class="warning">{{ pluralizar(manutencoesPendentes(), 'pendente', 'pendentes') }}</span>
+          @if (manutencoesAtrasadas() > 0) {
+            <span class="inactive">{{ pluralizar(manutencoesAtrasadas(), 'atrasada', 'atrasadas') }}</span>
+          }
+        </span>
+      </a>
+    </section>
+
+    <div class="dashboard-grid">
+      <section class="card" aria-labelledby="titulo-alertas">
+        <h2 id="titulo-alertas">Alertas</h2>
+        @if (alertasVisiveis().length > 0) {
+          <ul class="alert-list">
+            @for (alerta of alertasVisiveis(); track alerta.id) {
+              <li class="alert-item alert-{{ alerta.tipo }}">
+                <span aria-hidden="true">{{ alerta.tipo === 'danger' ? '🔴' : alerta.tipo === 'warning' ? '🟡' : '🔵' }}</span>
+                <span class="visually-hidden">{{ alerta.tipo === 'danger' ? 'Crítico:' : alerta.tipo === 'warning' ? 'Atenção:' : 'Informação:' }}</span>
+                <a class="alert-message" [routerLink]="alerta.rota" [queryParams]="alerta.params">{{ alerta.mensagem }}</a>
+                @if (alerta.data) {
+                  <span class="alert-date">{{ alerta.data }}</span>
+                }
+              </li>
+            }
+          </ul>
+          @if (alertasOcultos() > 0) {
+            <p class="alert-mais">
+              e mais {{ alertasOcultos() }} {{ alertasOcultos() === 1 ? 'alerta' : 'alertas' }}. Os mais graves aparecem primeiro.
+            </p>
+          }
+        } @else {
+          <p class="sem-alertas">Nenhum alerta no momento.</p>
+        }
+      </section>
+
+      @defer (on idle) {
+        <section class="card" aria-labelledby="titulo-frota">
+          <h2 id="titulo-frota">Frota por situação</h2>
+          <app-donut-chart titulo="Frota por situação" unidade="veículos" unidadeSingular="veículo" [dados]="frota()" />
+        </section>
+      } @placeholder {
+        <app-skeleton variante="grafico" [anunciar]="false" />
+      }
+    </div>
+
+    @defer (on idle) {
+      <div class="dashboard-grid">
+        <section class="card" aria-labelledby="titulo-manutencoes-mes">
+          <h2 id="titulo-manutencoes-mes">Manutenções por mês</h2>
+          <app-bar-chart titulo="Manutenções por mês" unidade="manutenções" unidadeSingular="manutenção" [dados]="manutencoesPorMes()" />
+        </section>
+
+        <section class="card" aria-labelledby="titulo-entregas-status">
+          <h2 id="titulo-entregas-status">Entregas por status</h2>
+          <app-bar-chart titulo="Entregas por status" unidade="entregas" unidadeSingular="entrega" [dados]="entregasPorStatus()" />
+        </section>
+      </div>
+    } @placeholder {
+      <div class="dashboard-grid">
+        <app-skeleton variante="grafico" altura="8rem" [anunciar]="false" />
+        <app-skeleton variante="grafico" altura="8rem" [anunciar]="false" />
+      </div>
+    }
+
+    <section class="secao" aria-labelledby="titulo-entregas">
+      <div class="secao-cabecalho">
+        <h2 id="titulo-entregas">Últimas Entregas</h2>
+        <a class="btn btn--secondary btn--sm" [href]="rastreamentoUrl" target="_blank" rel="noopener noreferrer">
+          Ver no rastreamento <span aria-hidden="true">↗</span>
+          <span class="visually-hidden">(abre em nova aba)</span>
+        </a>
+      </div>
+      @defer (on idle) {
+        @if (ultimasEntregas().length > 0) {
+          <app-data-table legenda="Últimas entregas">
+            <thead>
+              <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Status</th>
+                <th scope="col">Motorista</th>
+                <th scope="col">Destino</th>
+                <th scope="col" class="col-num">Distância</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (entrega of ultimasEntregas(); track entrega.id) {
+                <tr>
+                  <td data-label="Código"><a routerLink="/entregas" [queryParams]="{ id: entrega.id }">{{ entrega.codigo_rastreio }}</a></td>
+                  <td data-label="Status"><app-status-badge dominio="entrega" [valor]="entrega.status" /></td>
+                  <td data-label="Motorista">{{ entrega.motorista_nome }}</td>
+                  <td data-label="Destino">{{ entrega.destino_endereco }}</td>
+                  <td data-label="Distância" class="col-num">{{ entrega.distancia_km }} km</td>
+                </tr>
+              }
+            </tbody>
+          </app-data-table>
+        } @else {
+          <app-empty-state mensagem="Nenhuma entrega encontrada." />
+        }
+      } @placeholder {
+        <app-skeleton variante="tabela" [linhas]="3" [colunas]="5" [anunciar]="false" />
+      }
+    </section>
+  }
+</div>

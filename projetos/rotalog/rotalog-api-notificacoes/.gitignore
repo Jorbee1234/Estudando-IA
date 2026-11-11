@@ -1,0 +1,16 @@
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.DotSettings.user
+*.log
+.DS_Store
+
+# Configuração local e segredos: copie appsettings.Example.json para appsettings.json (ADR 0001, D3)
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json
+.env
+.env.*
+appsettings.Local.json

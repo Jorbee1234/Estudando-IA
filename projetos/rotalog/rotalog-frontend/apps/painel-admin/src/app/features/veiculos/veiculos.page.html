@@ -1,0 +1,161 @@
+<div class="page">
+  <app-page-header titulo="Gestão de Veículos">
+    <button appButton (click)="mostrarFormulario()">+ Novo Veículo</button>
+  </app-page-header>
+
+  <div class="filters">
+    <input
+      type="text"
+      aria-label="Buscar por placa ou modelo"
+      placeholder="Buscar por placa ou modelo..."
+      [ngModel]="filtros().q"
+      (ngModelChange)="digitar($event)"
+    />
+    <select aria-label="Filtrar por status" [ngModel]="filtros().status" (ngModelChange)="filtrarStatus($event)">
+      <option value="">Todos os Status</option>
+      <option value="ATIVO">Ativo</option>
+      <option value="INATIVO">Inativo</option>
+      <option value="MANUTENCAO">Em Manutenção</option>
+    </select>
+    <div class="ordenar-estreito">
+      <select aria-label="Ordenar por" [ngModel]="filtros().ordem" (ngModelChange)="ordenarPor($event)">
+        <option value="">Ordenar por: padrão</option>
+        <option value="placa:asc">Placa (A a Z)</option>
+        <option value="placa:desc">Placa (Z a A)</option>
+        <option value="modelo:asc">Modelo (A a Z)</option>
+        <option value="modelo:desc">Modelo (Z a A)</option>
+        <option value="id:asc">ID (menor primeiro)</option>
+        <option value="id:desc">ID (maior primeiro)</option>
+      </select>
+    </div>
+    <div class="filters__acoes">
+      @if (temFiltro()) {
+        <button appButton variante="secondary" [pequeno]="true" (click)="limparFiltros()">Limpar filtros</button>
+      }
+      <app-density-toggle />
+    </div>
+  </div>
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregarVeiculos()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-skeleton variante="tabela" [linhas]="5" [colunas]="7" rotulo="Carregando veículos..." />
+  } @else if (!mostrandoForm()) {
+    @if (pagina().total > 0) {
+      <app-data-table legenda="Lista de veículos" [rolavel]="pagina().tamanho > 10">
+        <thead>
+          <tr>
+            <th appSortable [ordem]="ordemDe('id')" (ordenar)="ordenar('id')">ID</th>
+            <th appSortable [ordem]="ordemDe('placa')" (ordenar)="ordenar('placa')">Placa</th>
+            <th appSortable [ordem]="ordemDe('modelo')" (ordenar)="ordenar('modelo')">Modelo</th>
+            <th scope="col">Ano</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="col-num">KM Atual</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (veiculo of pagina().itens; track veiculo.id) {
+            <tr class="is-clickable">
+              <td data-label="ID">{{ veiculo.id }}</td>
+              <td data-label="Placa"><button type="button" class="row-link" [attr.aria-label]="'Ver detalhes do veículo ' + veiculo.placa" (click)="selecionarVeiculo(veiculo)">{{ veiculo.placa }}</button></td>
+              <td data-label="Modelo">{{ veiculo.modelo }}</td>
+              <td data-label="Ano">{{ veiculo.ano }}</td>
+              <td data-label="Status"><app-status-badge dominio="veiculo" [valor]="veiculo.status" /></td>
+              <td data-label="KM Atual" class="col-num">{{ veiculo.km_atual | number }} km</td>
+              <td data-label="Ações">
+                <div class="actions">
+                  <button
+                    appButton
+                    variante="secondary"
+                    [pequeno]="true"
+                    (click)="editarVeiculo(veiculo)"
+                  >
+                    Editar
+                  </button>
+                  @if (veiculo.status === StatusVeiculo.INATIVO) {
+                    <button appButton variante="primary" [pequeno]="true" (click)="confirmarReativacao(veiculo)">
+                      Reativar
+                    </button>
+                  } @else {
+                    <button appButton variante="danger" [pequeno]="true" (click)="confirmarDesativacao(veiculo)">
+                      Desativar
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </app-data-table>
+      <app-paginator
+        itens="veículos"
+        [total]="pagina().total"
+        [pagina]="pagina().pagina"
+        [tamanho]="pagina().tamanho"
+        (paginaChange)="irParaPagina($event)"
+        (tamanhoChange)="mudarTamanho($event)"
+      />
+    } @else if (!erro()) {
+      <app-empty-state mensagem="Nenhum veículo encontrado." />
+    }
+  }
+
+  @if (mostrandoForm()) {
+    <section class="form-container" aria-labelledby="titulo-form">
+      <h2 id="titulo-form" tabindex="-1" appFocoAoAbrir (fechar)="cancelarForm()">{{ editando() ? 'Editar Veículo' : 'Novo Veículo' }}</h2>
+      <form [formGroup]="form" (submit)="salvarVeiculo($event)">
+        <div class="form-grid">
+          <app-form-field label="Placa" [obrigatorio]="true" [erro]="erroDe('placa')">
+            <input appControl type="text" formControlName="placa" placeholder="ABC1D23" />
+          </app-form-field>
+          <app-form-field label="Modelo" [obrigatorio]="true" [erro]="erroDe('modelo')">
+            <input appControl type="text" formControlName="modelo" />
+          </app-form-field>
+          <app-form-field label="Ano">
+            <input appControl type="number" formControlName="ano" />
+          </app-form-field>
+          <app-form-field label="KM Atual">
+            <input appControl type="number" formControlName="km_atual" />
+          </app-form-field>
+        </div>
+        <div class="form-actions">
+          <button appButton tipo="submit">{{ editando() ? 'Atualizar' : 'Cadastrar' }}</button>
+          <button appButton variante="secondary" (click)="cancelarForm()">Cancelar</button>
+        </div>
+      </form>
+    </section>
+  }
+
+  @if (veiculoSelecionado(); as sel) {
+    @if (!mostrandoForm()) {
+    <section class="card detail-panel" aria-labelledby="titulo-detalhe">
+      <div class="detail-header">
+        <h2 id="titulo-detalhe" tabindex="-1" appFocoAoAbrir (fechar)="fecharDetalhe()">{{ sel.placa }} - {{ sel.modelo }}</h2>
+        <button appButton variante="icon" aria-label="Fechar detalhes" (click)="fecharDetalhe()">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+      <dl class="detail-grid">
+        <div>
+          <dt>Ano</dt>
+          <dd>{{ sel.ano }}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd><app-status-badge dominio="veiculo" [valor]="sel.status" /></dd>
+        </div>
+        <div>
+          <dt>KM Atual</dt>
+          <dd>{{ sel.km_atual | number }} km</dd>
+        </div>
+      </dl>
+    </section>
+    }
+  }
+</div>

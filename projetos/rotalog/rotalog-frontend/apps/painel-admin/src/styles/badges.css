@@ -1,0 +1,36 @@
+/* Badge de status (ADR 0001, D3/D4): sempre ícone + rótulo, nunca só cor. Classe gerada pelo STATUS_CONFIG. */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--raio-pill);
+  font-size: var(--fs-xs);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+}
+
+.status--sucesso {
+  background: var(--tom-sucesso-fundo);
+  color: var(--tom-sucesso-texto);
+}
+
+.status--alerta {
+  background: var(--tom-alerta-fundo);
+  color: var(--tom-alerta-texto);
+}
+
+.status--perigo {
+  background: var(--tom-perigo-fundo);
+  color: var(--tom-perigo-texto);
+}
+
+.status--info {
+  background: var(--tom-info-fundo);
+  color: var(--tom-info-texto);
+}
+
+.status--neutro {
+  background: var(--tom-neutro-fundo);
+  color: var(--tom-neutro-texto);
+}

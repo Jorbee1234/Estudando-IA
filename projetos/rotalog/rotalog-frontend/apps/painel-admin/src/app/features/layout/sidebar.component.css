@@ -1,0 +1,140 @@
+.sidebar {
+  width: var(--largura-sidebar);
+  height: 100vh;
+  background: var(--cor-sidebar);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebar-header {
+  padding: var(--esp-5) var(--esp-4);
+  border-bottom: 1px solid var(--cor-sidebar-borda);
+  text-align: center;
+}
+
+.logo {
+  font-size: var(--fs-xl);
+  font-weight: var(--peso-forte);
+  color: var(--cor-sidebar-destaque);
+}
+
+.subtitle {
+  font-size: var(--fs-xs);
+  color: var(--cor-sidebar-mudo);
+}
+
+.sidebar-corpo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 0;
+  margin: var(--esp-5) 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nav-menu li a {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-height: var(--alvo-minimo);
+  padding: var(--esp-3) var(--esp-5);
+  color: var(--cor-sidebar-texto);
+  text-decoration: none;
+  font-size: var(--fs-md);
+  transition: background var(--duracao-curta) var(--easing), color var(--duracao-curta) var(--easing);
+}
+
+.nav-menu li a:hover {
+  background: var(--cor-sidebar-hover);
+  color: #fff;
+}
+
+.nav-menu li a.active {
+  background: var(--cor-sidebar-ativo);
+  color: var(--cor-sidebar-destaque);
+  border-left: 3px solid var(--cor-sidebar-destaque);
+}
+
+.nav-menu li a:focus-visible,
+.menu-toggle:focus-visible {
+  outline-color: var(--cor-sidebar-destaque);
+  outline-offset: -3px;
+}
+
+.icon {
+  font-size: var(--fs-lg);
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  border-top: 1px solid var(--cor-sidebar-borda);
+  font-size: var(--fs-xs);
+  color: var(--cor-sidebar-mudo);
+  text-align: center;
+}
+
+/* Telas estreitas: barra no topo, com o menu recolhível */
+@media (max-width: 47.9375rem) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--esp-2) var(--esp-4);
+    border-bottom: 0;
+    text-align: left;
+  }
+
+  .marca {
+    display: flex;
+    align-items: baseline;
+    gap: var(--esp-3);
+  }
+
+  .logo {
+    font-size: var(--fs-lg);
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .sidebar-corpo {
+    display: none;
+    overflow-y: auto;
+    border-top: 1px solid var(--cor-sidebar-borda);
+  }
+
+  .sidebar.aberta .sidebar-corpo {
+    display: flex;
+  }
+
+  .nav-menu {
+    margin: var(--esp-2) 0;
+  }
+
+  /* O recolher é do desktop: na gaveta não faz sentido */
+  .recolher-toggle {
+    display: none;
+  }
+}

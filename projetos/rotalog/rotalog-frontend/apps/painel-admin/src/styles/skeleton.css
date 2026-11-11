@@ -1,0 +1,151 @@
+/*
+ * Esqueleto de carregamento (ADR 0003, D2). Peças decorativas (aria-hidden): o anúncio para
+ * leitores de tela é um role="status" à parte. O brilho só anima sem prefers-reduced-motion.
+ */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+/* Variantes que desenham um cartão próprio */
+.skeleton--cartao,
+.skeleton--grafico {
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+  margin-bottom: var(--esp-5);
+}
+
+.skeleton--estatisticas {
+  gap: 0;
+}
+
+.skeleton--tabela {
+  gap: 0;
+}
+
+.skeleton-bloco {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--skeleton-base);
+  border-radius: var(--raio-sm);
+}
+
+.skeleton-bloco::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--skeleton-brilho), transparent);
+  animation: skeleton-brilho var(--duracao-skeleton) var(--easing) infinite;
+}
+
+@keyframes skeleton-brilho {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-bloco::after {
+    animation: none;
+    display: none;
+  }
+}
+
+.skeleton-barra {
+  height: 0.875rem;
+  width: 100%;
+}
+
+.skeleton-barra--fina {
+  height: 0.75rem;
+}
+
+.skeleton-barra--media {
+  width: 70%;
+}
+
+.skeleton-barra--curta {
+  width: 55%;
+}
+
+.skeleton-titulo {
+  height: 1.25rem;
+  width: 40%;
+  margin-bottom: var(--esp-2);
+}
+
+.skeleton-icone {
+  width: 2rem;
+  height: 2rem;
+}
+
+.skeleton-valor {
+  height: 2rem;
+  width: 4rem;
+}
+
+.skeleton-grafico {
+  width: 100%;
+  border-radius: var(--raio-md);
+}
+
+/* Cartões de estatística: mesma grade do dashboard (13rem) e das mini-estatísticas (8rem) */
+.skeleton-estatisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--esp-5);
+  margin-bottom: var(--esp-6);
+}
+
+.skeleton-estatisticas--compacto {
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--esp-4);
+  margin-bottom: var(--esp-5);
+}
+
+.skeleton-cartao-estat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+.skeleton-estatisticas--compacto .skeleton-cartao-estat {
+  align-items: center;
+  padding: var(--esp-4);
+}
+
+/* Tabela: mesmo contêiner do app-data-table, linhas com a altura da densidade atual */
+.skeleton-tabela {
+  overflow: hidden;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+.skeleton-tabela__linha {
+  display: grid;
+  grid-template-columns: repeat(var(--colunas), minmax(0, 1fr));
+  align-items: center;
+  gap: var(--tabela-celula-x);
+  min-height: calc(var(--tabela-celula-y) * 2 + 1.5rem);
+  padding: 0 var(--tabela-celula-x);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.skeleton-tabela__linha:last-child {
+  border-bottom: 0;
+}
+
+.skeleton-tabela__cabecalho {
+  background: var(--cor-superficie-alt);
+}

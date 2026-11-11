@@ -1,0 +1,87 @@
+/* Botões (ADR 0001, D4). Uso: <button class="btn btn--primary"> ou <button appButton variante="primary">. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-minimo);
+  padding: var(--esp-2) var(--esp-4);
+  border: 1px solid transparent;
+  border-radius: var(--raio-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--peso-medio);
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background var(--transicao), border-color var(--transicao), transform var(--transicao);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--cor-primaria);
+  color: var(--cor-primaria-texto);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--cor-primaria-hover);
+}
+
+.btn--secondary {
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border-color: var(--cor-borda-forte);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--cor-superficie-alt);
+}
+
+.btn--danger {
+  background: var(--cor-perigo);
+  color: #fff;
+}
+
+:root[data-theme='dark'] .btn--danger {
+  color: var(--cor-primaria-texto);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .btn--danger {
+    color: var(--cor-primaria-texto);
+  }
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--cor-perigo-hover);
+}
+
+/* Ação pequena dentro de tabelas (editar, excluir) */
+.btn--sm {
+  min-height: 2rem;
+  padding: var(--esp-1) var(--esp-3);
+  font-size: var(--fs-xs);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--cor-link);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--cor-primaria-suave);
+}
+
+.btn--icon {
+  min-width: var(--alvo-minimo);
+  padding: var(--esp-2);
+  background: transparent;
+  color: var(--cor-texto-suave);
+}
+
+.btn--icon:hover:not(:disabled) {
+  background: var(--cor-superficie-alt);
+}

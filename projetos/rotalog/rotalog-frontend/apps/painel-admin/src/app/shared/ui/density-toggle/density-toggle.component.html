@@ -1,0 +1,4 @@
+<button type="button" class="btn btn--secondary btn--sm" [attr.aria-pressed]="compacta()" (click)="alternar()">
+  <span aria-hidden="true">{{ compacta() ? '☰' : '☷' }}</span>
+  <span class="rotulo">Modo compacto</span>
+</button>

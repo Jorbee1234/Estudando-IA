@@ -1,0 +1,11 @@
+.tela { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: var(--espaco-4); padding: var(--espaco-8) var(--espaco-4); background: linear-gradient(180deg, var(--cor-primaria-suave) 0%, var(--cor-fundo) 100%); }
+.icone { display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 50%; background: var(--cor-superficie); color: var(--cor-primaria); box-shadow: var(--sombra-2); }
+.titulo { margin: 0; font-size: var(--texto-3xl); line-height: 1.15; font-weight: var(--peso-bold); color: var(--cor-texto); letter-spacing: -0.02em; }
+.texto { margin: 0; max-width: 32rem; font-size: var(--texto-lg); color: var(--cor-texto-suave); }
+.busca { width: 100%; max-width: 32rem; margin-top: var(--espaco-2); }
+.dica { margin: 0; font-size: var(--texto-sm); color: var(--cor-texto-suave); }
+
+@media (max-width: 640px) {
+  .titulo { font-size: var(--texto-2xl); }
+  .texto { font-size: var(--texto-md); }
+}

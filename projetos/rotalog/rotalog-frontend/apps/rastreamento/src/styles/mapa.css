@@ -1,0 +1,55 @@
+/* Marcadores e popups do Leaflet: as classes vêm de strings (divIcon/popup), então são globais com prefixo `rt-`. */
+.rt-custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.rt-marker-ponto {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 35%);
+}
+
+.rt-forma-circulo { border-radius: 50%; }
+.rt-forma-quadrado { border-radius: 0.5rem; }
+
+.rt-marker-origem .rt-marker-ponto { background: var(--cor-primaria); }
+.rt-marker-destino .rt-marker-ponto { background: #b3261e; }
+.rt-marker-posicao .rt-marker-ponto { background: #fff; border-color: var(--cor-primaria); box-shadow: none; }
+.rt-marker-posicao-atual .rt-marker-ponto { background: #b45309; }
+
+/* Pulso do veículo (desligado por prefers-reduced-motion em base.css) */
+.rt-pulso {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #b45309;
+  opacity: 0;
+  animation: rt-pulso 2s ease-out infinite;
+}
+
+@keyframes rt-pulso {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.rt-popup { min-width: 11rem; font-family: var(--fonte); }
+.rt-popup strong { display: block; margin-bottom: 0.125rem; }
+.rt-popup-titulo-origem { color: var(--cor-primaria); }
+.rt-popup-titulo-destino { color: var(--cor-erro); }
+.rt-popup-linha { display: block; font-size: 0.8125rem; }
+.rt-popup-data { font-size: 0.75rem; color: var(--cor-texto-suave); }
+
+/* Controles de zoom no padrão visual do portal */
+.leaflet-bar { border: 0; box-shadow: var(--sombra-2); border-radius: var(--raio-2); overflow: hidden; }
+.leaflet-bar a { color: var(--cor-primaria); }
+
+@media (pointer: coarse) {
+  .leaflet-bar a { width: var(--alvo-toque); height: var(--alvo-toque); line-height: var(--alvo-toque); font-size: 1.25rem; }
+}

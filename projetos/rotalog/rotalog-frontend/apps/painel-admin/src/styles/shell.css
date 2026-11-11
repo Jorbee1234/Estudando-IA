@@ -1,0 +1,239 @@
+/*
+ * Shell e acabamento (ADR 0003, D6): menu recolhido, transição entre rotas, entrada suave de
+ * toast e diálogo e estados de interação. Tudo respeita prefers-reduced-motion: as durações
+ * (--duracao-*) viram 0s e as transições de rota são puladas.
+ */
+
+/* ---- Menu recolhido (só no desktop; o CSS da sidebar cuida do próprio layout) ---- */
+@media (min-width: 48rem) {
+  :root[data-sidebar='recolhida'] {
+    --largura-sidebar: var(--largura-sidebar-recolhida);
+  }
+
+  /* Rótulo dos botões do rodapé (tema, densidade): sai da vista, continua sendo o nome acessível */
+  .sidebar.recolhida app-theme-toggle .rotulo,
+  .sidebar.recolhida app-density-toggle .rotulo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* ---- Sidebar recolhida: layout, dicas acessíveis (movido do CSS do componente, que tinha estourado
+   o orçamento anyComponentStyle) ---- */
+/* Desktop: menu recolhido (só ícones), com dicas acessíveis. Em telas estreitas o menu é uma
+   gaveta e nada disto vale. */
+@media (min-width: 48rem) {
+  .sidebar {
+    transition: width var(--duracao-media) var(--easing);
+  }
+
+  .sidebar.recolhida .subtitle,
+  .sidebar.recolhida .logo-completo,
+  .sidebar.recolhida .rotulo,
+  .sidebar.recolhida .versao {
+    /* Escondido só da vista: o texto continua sendo o nome acessível de cada controle. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .sidebar.recolhida .logo-curto {
+    display: inline;
+  }
+
+  .sidebar.recolhida .sidebar-header {
+    padding-inline: var(--esp-2);
+  }
+
+  .sidebar.recolhida .nav-menu {
+    /* Sem rolagem própria: ela cortaria as dicas que saem pela lateral. */
+    overflow: visible;
+  }
+
+  .sidebar.recolhida .nav-menu li a {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .sidebar.recolhida .sidebar-footer {
+    padding-inline: var(--esp-2);
+  }
+
+  /* Dica: texto do rótulo ao lado do ícone. A borda transparente faz parte da caixa, então o
+     ponteiro pode ir do ícone até a dica sem ela sumir (WCAG 1.4.13: persistente). */
+  .sidebar.recolhida [data-rotulo] {
+    position: relative;
+  }
+
+  .sidebar.recolhida [data-rotulo]::after {
+    content: attr(data-rotulo);
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    z-index: 200;
+    padding: var(--esp-1) var(--esp-3);
+    background: var(--cor-superficie);
+    background-clip: padding-box;
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda-forte);
+    border-left: 0.5rem solid transparent;
+    border-radius: var(--raio-sm);
+    box-shadow: var(--elev-2);
+    font-size: var(--fs-sm);
+    font-weight: var(--peso-medio);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%);
+    transition: opacity var(--duracao-curta) var(--easing), visibility var(--duracao-curta);
+  }
+
+  .sidebar.recolhida [data-rotulo]:hover::after,
+  .sidebar.recolhida [data-rotulo]:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Esc dispensou as dicas: ficam fora até o foco ou o ponteiro mudar de item */
+  .sidebar.recolhida.sem-dicas [data-rotulo]::after {
+    display: none;
+  }
+}
+
+/* ---- Usuário logado no rodapé do menu (só aparece com a autenticação ligada) ---- */
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  max-width: 100%;
+  color: var(--cor-sidebar-texto);
+}
+
+.usuario-nome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--cor-sidebar-ativo);
+  color: var(--cor-sidebar-destaque);
+  border-radius: var(--raio-pill);
+  font-weight: var(--peso-forte);
+}
+
+/* ---- Peças do menu que só precisam de estilo global ---- */
+.menu-toggle {
+  display: none;
+  color: #fff;
+}
+
+/* Sobrescreve o hover claro do .btn--icon, que deixaria o ícone branco invisível */
+.sidebar .menu-toggle:hover:not(:disabled) {
+  background: var(--cor-sidebar-hover);
+}
+
+.versao {
+  margin: 0;
+}
+
+.logo-curto {
+  display: none;
+}
+
+/* ---- Transição entre rotas (View Transitions API, via withViewTransitions) ---- */
+/* Só o conteúdo anima; a sidebar fica parada. */
+.main-wrapper {
+  view-transition-name: conteudo;
+}
+
+::view-transition-old(conteudo) {
+  animation: conteudo-sai var(--duracao-media) var(--easing) both;
+}
+
+::view-transition-new(conteudo) {
+  animation: conteudo-entra var(--duracao-media) var(--easing) both;
+}
+
+@keyframes conteudo-sai {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes conteudo-entra {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---- Entrada suave de toast e diálogo ---- */
+.toast {
+  animation: toast-entra var(--duracao-media) var(--easing);
+}
+
+@keyframes toast-entra {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+.dialogo[open] {
+  animation: dialogo-entra var(--duracao-media) var(--easing);
+}
+
+.dialogo[open]::backdrop {
+  animation: fundo-entra var(--duracao-media) var(--easing);
+}
+
+@keyframes dialogo-entra {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+}
+
+@keyframes fundo-entra {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---- Estados de interação ---- */
+/* Botão pressionado: um leve afundar, para o clique "responder" */
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Linha de tabela com foco dentro (botão/link da linha): destaque para quem navega por teclado */
+.data-table tbody tr:focus-within {
+  background: var(--cor-primaria-suave);
+}
+
+/* Link de alerta e de linha: sublinhado mais grosso ao passar o mouse */
+.alert-message:hover,
+.row-link:hover {
+  text-decoration-thickness: 2px;
+}

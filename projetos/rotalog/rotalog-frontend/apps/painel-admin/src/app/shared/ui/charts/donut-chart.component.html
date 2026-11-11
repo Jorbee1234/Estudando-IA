@@ -1,0 +1,62 @@
+<figure class="grafico">
+  <div class="donut">
+    <svg class="donut__svg" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+      <circle class="donut__fundo" cx="18" cy="18" r="15.9155" />
+      @for (s of segmentos(); track s.rotulo) {
+        <circle
+          class="donut__segmento"
+          cx="18"
+          cy="18"
+          r="15.9155"
+          transform="rotate(-90 18 18)"
+          [style.stroke]="s.cor"
+          [attr.stroke-dasharray]="s.tracejado"
+          [attr.stroke-dashoffset]="s.deslocamento"
+        />
+      }
+      <text class="donut__total" x="18" y="18.6" text-anchor="middle">{{ total() }}</text>
+      <text class="donut__unidade" x="18" y="23" text-anchor="middle">{{ nomeDaUnidade() }}</text>
+    </svg>
+
+    <ul class="legenda" aria-hidden="true">
+      @for (s of segmentos(); track s.rotulo) {
+        <li>
+          <span class="legenda__cor" [style.--cor]="s.cor"></span>
+          <span>{{ s.rotulo }}</span>
+          <strong>{{ s.valor }} <span class="legenda__pct">({{ s.percentual }}%)</span></strong>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <figcaption>
+    @if (total() > 0) {
+      Total: {{ total() }} {{ nomeDaUnidade() }}
+    } @else {
+      Sem dados.
+    }
+  </figcaption>
+
+  <!-- O contêiner (1 px, recortado) é quem se esconde: uma <table> ignora width e estouraria a página. -->
+  <div class="visually-hidden">
+  <table>
+    <caption>{{ titulo() }}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Categoria</th>
+        <th scope="col">Quantidade</th>
+        <th scope="col">Percentual</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (s of segmentos(); track s.rotulo) {
+        <tr>
+          <th scope="row">{{ s.rotulo }}</th>
+          <td>{{ s.valor }}</td>
+          <td>{{ s.percentual }}%</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  </div>
+</figure>

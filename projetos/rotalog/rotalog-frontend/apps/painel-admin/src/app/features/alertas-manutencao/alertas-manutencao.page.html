@@ -1,0 +1,80 @@
+<div class="page">
+  <app-page-header titulo="Alertas de manutenção">
+    <button appButton variante="secondary" [disabled]="acao() !== null" (click)="reenviarPendentes()">
+      {{ acao() === 'reprocessar' ? 'Reenviando...' : 'Reenviar pendentes' }}
+    </button>
+    <button appButton [disabled]="acao() !== null" (click)="verificarAgora()">
+      {{ acao() === 'verificar' ? 'Verificando...' : 'Verificar agora' }}
+    </button>
+  </app-page-header>
+
+  <div class="filters">
+    <input
+      type="text"
+      aria-label="Buscar por placa"
+      placeholder="Buscar por placa..."
+      [ngModel]="filtros().q"
+      (ngModelChange)="digitar($event)"
+    />
+    <select aria-label="Filtrar por status" [ngModel]="filtros().status" (ngModelChange)="filtrarStatus($event)">
+      <option value="">Todos os Status</option>
+      <option value="PENDENTE">Pendente</option>
+      <option value="ENVIADO">Enviado</option>
+      <option value="FALHA">Falha</option>
+    </select>
+    <div class="filters__acoes">
+      @if (temFiltro()) {
+        <button appButton variante="secondary" [pequeno]="true" (click)="limparFiltros()">Limpar filtros</button>
+      }
+      <app-density-toggle />
+    </div>
+  </div>
+
+  @if (erro(); as mensagemErro) {
+    <div class="error-banner" role="alert">
+      <span>{{ mensagemErro }}</span>
+      <button type="button" class="btn btn--secondary btn--sm" (click)="carregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-skeleton variante="tabela" [linhas]="5" [colunas]="7" rotulo="Carregando alertas..." />
+  } @else if (pagina().total > 0) {
+    <app-data-table legenda="Lista de alertas de manutenção" [rolavel]="pagina().tamanho > 10">
+      <thead>
+        <tr>
+          <th scope="col">Placa</th>
+          <th scope="col">Modelo</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Motivo</th>
+          <th scope="col" class="col-num">KM Atual</th>
+          <th scope="col">Status</th>
+          <th scope="col" class="col-num">Tentativas</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (alerta of pagina().itens; track alerta.id) {
+          <tr>
+            <td data-label="Placa">{{ alerta.placa }}</td>
+            <td data-label="Modelo">{{ alerta.modelo }}</td>
+            <td data-label="Tipo">{{ alerta.tipo === 'KM' ? 'Quilometragem' : 'Data' }}</td>
+            <td data-label="Motivo">{{ alerta.motivo }}</td>
+            <td data-label="KM Atual" class="col-num">{{ alerta.km_atual | number }} km</td>
+            <td data-label="Status"><app-status-badge dominio="alertaManutencao" [valor]="alerta.status" /></td>
+            <td data-label="Tentativas" class="col-num">{{ alerta.tentativas }}</td>
+          </tr>
+        }
+      </tbody>
+    </app-data-table>
+    <app-paginator
+      itens="alertas"
+      [total]="pagina().total"
+      [pagina]="pagina().pagina"
+      [tamanho]="pagina().tamanho"
+      (paginaChange)="irParaPagina($event)"
+      (tamanhoChange)="mudarTamanho($event)"
+    />
+  } @else if (!erro()) {
+    <app-empty-state mensagem="Nenhum alerta de manutenção encontrado." />
+  }
+</div>

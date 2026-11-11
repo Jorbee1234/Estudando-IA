@@ -1,0 +1,4 @@
+<button type="button" class="btn btn--secondary btn--sm" [attr.aria-pressed]="escuro()" (click)="alternar()">
+  <span aria-hidden="true">{{ escuro() ? '☾' : '☀' }}</span>
+  <span class="rotulo">Tema escuro</span>
+</button>

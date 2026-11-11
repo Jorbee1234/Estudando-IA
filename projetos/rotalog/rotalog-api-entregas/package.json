@@ -1,0 +1,53 @@
+{
+  "name": "rotalog-api-entregas",
+  "version": "1.0.0",
+  "description": "RotaLog - Delivery management microservice (Legacy codebase for Alura course)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "db:migrate": "psql -h localhost -U rotalog_admin -d rotalog -f src/config/migration.sql",
+    "db:seed": "psql -h localhost -U rotalog_admin -d rotalog -f src/config/seed.sql",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "rotalog",
+    "entregas",
+    "delivery",
+    "legacy"
+  ],
+  "author": "RotaLog Dev Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^7.2.0",
+    "pg": "^8.9.0",
+    "pg-hstore": "^2.3.4",
+    "pino": "^9.14.0",
+    "pino-http": "^10.5.0",
+    "sequelize": "^6.28.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

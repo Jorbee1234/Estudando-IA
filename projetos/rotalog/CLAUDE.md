@@ -12,7 +12,7 @@ e `rotalog-workspace/MAPA_DIVIDAS_TECNICAS.md`.
 - NÃO corrigir dívida técnica proativamente; só refatorar se o usuário pedir.
 - Ao adicionar features, seguir o estilo/padrão do módulo em que se está mexendo.
 - Cada pasta é um repositório git independente.
-- Um único PostgreSQL 14 (db `rotalog`, user `rotalog_admin`) com 3 schemas: `frotas`, `entregas`, `notificacoes`.
+- Um único PostgreSQL 14 (db `rotalog`, user `rotalog_admin`; senha via `DB_PASSWORD` no `.env` do workspace, copie de `.env.example`) com 3 schemas: `frotas`, `entregas`, `notificacoes`.
 - Dados de teste/seed novos: atualizar `rotalog-workspace/tools/scripts/`.
 - Não ler/expor `.env` e senhas hardcoded.
 
@@ -46,7 +46,7 @@ Integrações (HTTP síncrono, URLs hardcoded/fallback, sem retry/circuit breake
 - Clients HTTP em `service`: `EntregaClient`, `NotificacaoClient` (RestTemplate, URL hardcoded)
 - Rotas (`/api/...`): `/veiculos` (placa, status, quilometragem, desativar/reativar, estatisticas), `/motoristas` (cnh, status, cnh-vencida, desativar/reativar), `/manutencoes` (veiculo, pendentes, iniciar/concluir/cancelar), `/alertas-manutencao` (GET filtros `status`/`veiculoId`, `{id}`, POST `verificar` e `reprocessar`), `/health`
 - Alerta de manutenção preventiva: tabela `frotas.alertas_manutencao`; critério `rotalog.manutencao.intervalo-km` (10000) / `intervalo-meses` (6) desde a última PREVENTIVA/REVISAO concluída; chama `POST /api/notificacoes/alerta-manutencao` (síncrono) e grava ENVIADO/FALHA; notificações fora do ar => PENDENTE (`reprocessar` reenvia). E2E: `rotalog-workspace/tools/e2e/alerta-manutencao.e2e.js`. Testes Java: `mvn test` (não há `mvnw` no repo)
-- Rodar: `./mvnw spring-boot:run`
+- Rodar: `./mvnw spring-boot:run`; exige as variáveis `DB_USER` e `DB_PASSWORD` (sem valor padrão)
 
 ### rotalog-api-entregas (Node 18 / Express 4 / Sequelize)
 

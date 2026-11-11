@@ -26,6 +26,7 @@ na primeira execução do container.
 ## Como subir
 
 ```bash
+cp .env.example .env   # defina DB_PASSWORD
 docker-compose up -d
 ```
 

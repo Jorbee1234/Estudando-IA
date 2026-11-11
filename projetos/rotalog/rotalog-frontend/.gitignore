@@ -47,3 +47,6 @@ Thumbs.db
 .claude/settings.local.json
 .nx/polygraph
 .angular
+
+# Linha de base dos testes visuais (sufixo -win32, só vale no Windows): gere com a flag de update do Playwright
+apps/painel-admin-e2e/src/*-snapshots/

@@ -55,7 +55,7 @@
 ### 1.3 Vulnerabilidades de segurança
 - 🔴 **Bypass de autenticação** ([middleware/auth.js:16](../rotalog-api-entregas/src/middleware/auth.js#L16)). Qualquer `NODE_ENV` diferente de `production` (inclusive *vazio*) libera a requisição. Em produção, basta um Bearer com 10 ou mais caracteres para virar `admin` fixo (`id:1`). Não há verificação de assinatura nem de expiração.
 - 🔴 **Rotas de escrita sem autenticação.** `/api/rastreamento` não tem `authMiddleware`, e `POST /api/rastreamento/:id` permite a qualquer um injetar eventos e posições falsas.
-- 🔴 **Segredos no repositório.** O `.env` está versionado (o `.gitignore` tem a linha `.env` comentada de propósito) com `DB_PASSWORD=rotalog123` e `JWT_SECRET`. O mesmo valor está de fallback em `config/database.js:20` e `auth.js:12`.
+- 🔴 **Segredos no repositório.** O `.env` está versionado (o `.gitignore` tem a linha `.env` comentada de propósito) com `DB_PASSWORD` e `JWT_SECRET`. O mesmo valor está de fallback em `config/database.js:20` e `auth.js:12`.
 - 🟠 **CORS `*`** com todos os métodos, escrito à mão.
 - 🟠 **Sem rate limiting, `helmet` ou limite de tamanho de body.** O endpoint público `/rastreamento/pedido/:numero` permite enumerar pedidos.
 - 🟠 **Vazamento de informação:** o `errorHandler` devolve `err.stack` fora de produção e loga `req.body` completo. Várias rotas devolvem `detalhes: error.message`.
@@ -124,7 +124,7 @@ Não se aplica (API). 🟡 Mensagens de erro misturam português e termos técni
 
 ### 2.3 Vulnerabilidades de segurança
 - 🔴 **Sem autenticação nem autorização** em nenhum endpoint (`desativar`, `cadastrar`, `concluir`…). `spring-boot-starter-security` não está no `pom.xml`.
-- 🔴 **Credenciais em `application.properties`** (`rotalog_admin`/`rotalog123`), versionadas.
+- 🔴 **Credenciais em `application.properties`** (usuário e senha fixos), versionadas.
 - 🟠 **CORS `allowedOrigins("*")`** para todos os verbos.
 - 🟠 **Sem Bean Validation.** `spring-boot-starter-validation` está no `pom.xml`, mas nenhum DTO usa `@Valid`/`@NotNull`. `cnh` só valida o tamanho (11 caracteres, sem checar se é numérico).
 - 🟠 **Logs excessivos em produção:** `show-sql=true`, `org.hibernate.type.descriptor.sql.BasicBinder=TRACE` (loga valores de parâmetros, como CNH e nome) e `org.springframework.web=DEBUG`.
@@ -344,7 +344,7 @@ Não se aplica (API). 🟡 Se os templates de e-mail forem HTML, precisarão de 
 - 🟡 Dados de seed misturam o campo `status` em maiúsculas (padrão) com valores que as UIs não conhecem (§4.2).
 
 ### 5.3 Vulnerabilidades de segurança
-- 🔴 **Senha em texto puro no `docker-compose.yml`** (`POSTGRES_PASSWORD: rotalog123`), repetida no `.env`, no `application.properties` e no `appsettings.json`. O `.gitignore` do workspace ignora `.env`, mas os repositórios dos serviços não.
+- 🔴 **Senha em texto puro no `docker-compose.yml`** (`POSTGRES_PASSWORD`), repetida no `.env`, no `application.properties` e no `appsettings.json`. O `.gitignore` do workspace ignora `.env`, mas os repositórios dos serviços não.
 - 🟠 **Porta 5432 publicada em `0.0.0.0`** com usuário administrador (`ports: "5432:5432"`). Use `127.0.0.1:5432:5432`.
 - 🟠 Um único superusuário para tudo: sem papéis por schema, sem RLS e sem auditoria (todos como `TODO` no `init-schemas.sql`).
 - 🟡 Imagem `postgres:14` sem pin de patch/digest. O Postgres 14 tem fim de suporte previsto para nov/2026, então **conferir a data**.
